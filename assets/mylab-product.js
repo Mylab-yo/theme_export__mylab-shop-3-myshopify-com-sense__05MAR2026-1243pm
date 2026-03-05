@@ -532,11 +532,23 @@ if (senseDrawerEl) {
     });
   }
 
+  // Setup close listeners globalement (toutes les pages)
+  function initDrawerClose() {
+    const closeBtn = document.getElementById('ml-drawer-close');
+    const overlay = document.getElementById('ml-drawer-overlay');
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (overlay) overlay.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeDrawer();
+    });
+  }
+
   if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
+    document.addEventListener('DOMContentLoaded', function() { initDrawerClose(); init(); });
+  } else {
+    initDrawerClose();
+    init();
+  }
 
   window.MylabCart = { open: openDrawer, close: closeDrawer, refresh: fetchAndRenderCart };
 
