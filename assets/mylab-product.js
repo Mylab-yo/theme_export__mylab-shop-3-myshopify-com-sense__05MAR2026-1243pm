@@ -75,9 +75,7 @@
     }
 
     initProduct();
-    initCartDrawer();
     initGallery();
-    fetchAndRenderCart();
   }
 
   // ============================================================
@@ -300,7 +298,8 @@
       const textEl = btn.querySelector('.ml-btn-cart__text');
       if (textEl) textEl.textContent = 'Ajouté !';
 
-      await fetchAndRenderCart();
+      const senseDrawer = document.querySelector('cart-drawer');
+      if (senseDrawer && typeof senseDrawer.open === 'function') senseDrawer.open();
 
       setTimeout(() => {
         btn.classList.remove('is-success');
@@ -315,187 +314,6 @@
       btn.classList.add('is-error');
       setTimeout(() => btn.classList.remove('is-error'), 2000);
     }
-  }
-
-  // ============================================================
-  // PANIER — FETCH & RENDER
-  // ============================================================
-
-  async function fetchAndRenderCart() {
-    try {
-      const response = await fetch('/cart.js', { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-      const cart = await response.json();
-      renderCart(cart);
-      updateCartCount(cart.item_count);
-    } catch (error) {
-      console.error('MyLab Fetch Cart Error:', error);
-    }
-  }
-
-  function renderCart(cart) {
-    const itemsContainer = document.getElementById('ml-drawer-items');
-    const emptyEl = document.getElementById('ml-drawer-empty');
-    const footerEl = document.getElementById('ml-drawer-footer');
-    const subtotalEl = document.getElementById('ml-drawer-subtotal');
-    const countEl = document.getElementById('ml-drawer-count');
-
-    if (!itemsContainer) return;
-
-    if (countEl) countEl.textContent = cart.item_count;
-
-    if (cart.item_count === 0) {
-      itemsContainer.innerHTML = '';
-      if (emptyEl) emptyEl.style.display = 'flex';
-      if (footerEl) footerEl.style.display = 'none';
-      return;
-    }
-
-    if (emptyEl) emptyEl.style.display = 'none';
-    if (footerEl) footerEl.style.display = 'block';
-
-    // Calculer le sous-total avec les vrais prix remisés depuis les tiers
-    const calculatedTotal = cart.items.reduce((sum, item) => {
-      const unitPrice = getUnitPriceFromTiers(item.variant_title, item.quantity);
-      return sum + (unitPrice ? unitPrice * item.quantity : item.line_price);
-    }, 0);
-
-    if (subtotalEl) subtotalEl.textContent = formatMoney(calculatedTotal) + ' HT';
-
-    itemsContainer.innerHTML = cart.items.map(item => {
-      const unitPrice = getUnitPriceFromTiers(item.variant_title, item.quantity);
-      const linePrice = unitPrice ? unitPrice * item.quantity : item.line_price;
-      const displayUnitPrice = unitPrice || item.price;
-
-      return `
-        <div class="ml-cart-item" data-line="${item.variant_id}" data-key="${item.key}">
-          <div class="ml-cart-item__img">
-            ${item.image
-              ? `<img src="${item.image}" alt="${item.product_title}" loading="lazy">`
-              : '<div class="ml-cart-item__img-placeholder"></div>'
-            }
-          </div>
-          <div class="ml-cart-item__details">
-            <div class="ml-cart-item__header">
-              <div class="ml-cart-item__name">${item.product_title}</div>
-              <div class="ml-cart-item__unit-price">${formatMoney(displayUnitPrice)} HT / unité</div>
-            </div>
-            ${item.variant_title && item.variant_title !== 'Default Title'
-              ? `<div class="ml-cart-item__variant">${item.variant_title}</div>`
-              : ''
-            }
-            <div class="ml-cart-item__price-row">
-              <div class="ml-cart-item__qty-display">
-                <span>${item.quantity} unité${item.quantity > 1 ? 's' : ''}</span>
-                <span class="ml-cart-item__price">${formatMoney(linePrice)} HT</span>
-              </div>
-              <button class="ml-cart-item__remove" data-key="${item.key}" aria-label="Supprimer">
-                <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-                Supprimer
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    attachCartItemListeners();
-  }
-
-  function attachCartItemListeners() {
-    document.querySelectorAll('.ml-cart-item__remove').forEach(btn => {
-      btn.addEventListener('click', async function () {
-        await updateCartItem(this.dataset.key, 0);
-      });
-    });
-  }
-
-  async function updateCartItem(key, quantity) {
-    try {
-      const response = await fetch('/cart/change.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-        body: JSON.stringify({ id: key, quantity })
-      });
-      const cart = await response.json();
-      renderCart(cart);
-      updateCartCount(cart.item_count);
-    } catch (error) {
-      console.error('MyLab Update Cart Error:', error);
-    }
-  }
-
-  // ============================================================
-  // PANIER TIROIR
-  // ============================================================
-
-  function initCartDrawer() {
-  const closeBtn = document.getElementById('ml-drawer-close');
-  const overlay = document.getElementById('ml-drawer-overlay');
-
-  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-  if (overlay) overlay.addEventListener('click', closeDrawer);
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeDrawer();
-  });
-
-  const selectors = [
-    '#cart-icon-bubble',
-    'a[href="/cart"]',
-    '.header__icon--cart',
-    '[data-cart-trigger]'
-  ];
-
-  selectors.forEach(selector => {
-    document.querySelectorAll(selector).forEach(el => {
-      el.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        toggleDrawer();
-      }, true);
-    });
-  });
-}
-
-  function openDrawer() {
-  const drawer = document.getElementById('ml-cart-drawer');
-  const overlay = document.getElementById('ml-drawer-overlay');
-  if (drawer) {
-    drawer.style.cssText = 'position: fixed !important; top: 0 !important; right: 0 !important; left: auto !important; width: 480px !important; height: 100vh !important; z-index: 99999 !important;';
-    drawer.classList.add('is-open');
-    drawer.setAttribute('aria-hidden', 'false');
-  }
-  if (overlay) { overlay.classList.add('is-visible'); overlay.setAttribute('aria-hidden', 'false'); }
-  document.body.classList.add('ml-drawer-open');
-}
-  
-  function closeDrawer() {
-    const drawer = document.getElementById('ml-cart-drawer');
-    const overlay = document.getElementById('ml-drawer-overlay');
-    if (drawer) { drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden', 'true'); }
-    if (overlay) { overlay.classList.remove('is-visible'); overlay.setAttribute('aria-hidden', 'true'); }
-    document.body.classList.remove('ml-drawer-open');
-  }
-
-  function toggleDrawer() {
-    const drawer = document.getElementById('ml-cart-drawer');
-    if (drawer && drawer.classList.contains('is-open')) {
-      closeDrawer();
-    } else {
-      fetchAndRenderCart().then(openDrawer);
-    }
-  }
-  
-
-  function updateCartCount(count) {
-    document.querySelectorAll('.cart-count-bubble, [data-cart-count]').forEach(el => {
-      el.textContent = count;
-      if (count > 0) el.style.display = '';
-    });
-    const drawerCount = document.getElementById('ml-drawer-count');
-    if (drawerCount) drawerCount.textContent = count;
   }
 
   // ============================================================
