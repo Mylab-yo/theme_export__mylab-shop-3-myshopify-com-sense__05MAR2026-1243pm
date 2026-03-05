@@ -125,7 +125,7 @@
                         {% if item.parent_relationship.parent != null %}
                           aria-label="{{- 'products.product.nested_label' | t: title: item.product.title, parent_title: item.parent_relationship.parent.title | escape -}}"
                         {% endif %}
-                      >
+                       data-cart-item-key="{{ item.key }}">
                         <td
                           class="cart-item__media"
                           role="cell"
@@ -159,20 +159,20 @@
                               <span class="visually-hidden">
                                 {{ 'products.product.price.regular_price' | t }}
                               </span>
-                              <s class="cart-item__old-price product-option">
+                              <s class="cart-item__old-price product-option" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-item-original-price>
                                 {{- item.original_price | money -}}
-                              </s>
+                              </s><div class="bss-b2b-qb-table"></div>
                               <span class="visually-hidden">
                                 {{ 'products.product.price.sale_price' | t }}
                               </span>
-                              <strong class="cart-item__final-price product-option">
+                              <strong class="cart-item__final-price product-option" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-item-final-price>
                                 {{ item.final_price | money }}
-                              </strong>
+                              </strong><div class="bss-b2b-qb-table"></div>
                             </div>
                           {%- else -%}
-                            <div class="product-option">
+                            <div class="product-option" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-item-original-price>
                               {{ item.original_price | money }}
-                            </div>
+                            </div><div class="bss-b2b-qb-table"></div>
                           {%- endif -%}
 
                           {%- if item.product.has_only_default_variant == false
@@ -241,18 +241,18 @@
                                 <span class="visually-hidden">
                                   {{ 'products.product.price.regular_price' | t }}
                                 </span>
-                                <s class="cart-item__old-price price price--end">
+                                <s class="cart-item__old-price price price--end" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-final-line-price>
                                   {{ item.original_line_price | money }}
                                 </s>
                                 <span class="visually-hidden">
                                   {{ 'products.product.price.sale_price' | t }}
                                 </span>
-                                <span class="price price--end">
+                                <span class="price price--end" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-final-line-price>
                                   {{ item.final_line_price | money }}
                                 </span>
                               </div>
                             {%- else -%}
-                              <span class="price price--end">
+                              <span class="price price--end" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-final-line-price>
                                 {{ item.original_line_price | money }}
                               </span>
                             {%- endif -%}
@@ -515,7 +515,7 @@
 
           <div class="totals" role="status">
             <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-            <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
+            <p class="totals__total-value" bss-b2b-cart-total-price>{{ cart.total_price | money_with_currency }}</p>
           </div>
 
           <small class="tax-note caption-large rte">
