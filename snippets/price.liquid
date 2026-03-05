@@ -52,7 +52,7 @@
       {%- if show_badges %} price--show-badge{% endif -%}
     "
   >
-    <div class="price__container" bss-b2b-product-id="{{ product.id }}" bss-b2b-product-price {% if use_variant %} bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-featured-product {% endif %}>
+    <div class="price__container" bss-b2b-product-id="{{ product.id }}" bss-b2b-product-price {% if use_variant %} bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-featured-product {% endif %} bss-b2b-product-qb-id="{{ product.id }}" bss-b2b-qb-featured-product-id="{{ product.id }}" bss-b2b-section-id="{{ section.id }}">
       {%- comment -%}
         Explanation of description list:
           - div.price__regular: Displayed when there are no variants on sale
