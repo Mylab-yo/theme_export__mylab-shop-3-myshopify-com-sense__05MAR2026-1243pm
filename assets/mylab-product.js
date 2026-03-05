@@ -298,8 +298,18 @@
       const textEl = btn.querySelector('.ml-btn-cart__text');
       if (textEl) textEl.textContent = 'Ajouté !';
 
-      const senseDrawer = document.querySelector('cart-drawer');
-      if (senseDrawer && typeof senseDrawer.open === 'function') senseDrawer.open();
+      try {
+        const senseDrawer = document.querySelector('cart-drawer');
+        if (senseDrawer) {
+          if (typeof senseDrawer.open === 'function') {
+            senseDrawer.open();
+          } else {
+            document.dispatchEvent(new CustomEvent('cart:open'));
+          }
+        }
+      } catch (drawerErr) {
+        console.warn('MyLab: impossible d\'ouvrir le drawer', drawerErr);
+      }
 
       setTimeout(() => {
         btn.classList.remove('is-success');
