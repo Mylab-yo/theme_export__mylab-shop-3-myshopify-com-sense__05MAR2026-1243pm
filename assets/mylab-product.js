@@ -80,21 +80,6 @@
     fetchAndRenderCart();
   }
 
-  // Bloquer le drawer Sense en permanence
-const observer = new MutationObserver(function() {
-  const senseDrawer = document.querySelector('cart-drawer');
-  if (senseDrawer && senseDrawer.classList.contains('is-active')) {
-    senseDrawer.classList.remove('is-active');
-    senseDrawer.classList.remove('drawer');
-    if (typeof senseDrawer.close === 'function') senseDrawer.close();
-  }
-});
-
-const senseDrawerEl = document.querySelector('cart-drawer');
-if (senseDrawerEl) {
-  observer.observe(senseDrawerEl, { attributes: true, subtree: true, attributeFilter: ['aria-expanded', 'class'] });
-}
-
   // ============================================================
   // CALCUL PRIX REMISÉ DEPUIS LES TIERS
   // ============================================================
@@ -532,54 +517,10 @@ if (senseDrawerEl) {
     });
   }
 
-  // Setup close listeners globalement (toutes les pages)
-  function initDrawerClose() {
-    const closeBtn = document.getElementById('ml-drawer-close');
-    const overlay = document.getElementById('ml-drawer-overlay');
-    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-    if (overlay) overlay.addEventListener('click', closeDrawer);
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeDrawer();
-    });
-  }
-
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() { initDrawerClose(); init(); });
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    initDrawerClose();
     init();
   }
-
-  window.MylabCart = { open: openDrawer, close: closeDrawer, refresh: fetchAndRenderCart };
-
-  // Désactiver le drawer natif Sense et forcer le nôtre
-const senseDrawer = document.querySelector('cart-drawer');
-if (senseDrawer) {
-  senseDrawer.style.display = 'none';
-  senseDrawer.open = function() {};
-  senseDrawer.close = function() {};
-}
-
-// Cloner le bouton panier pour supprimer les listeners BSS
-const cartBtn = document.getElementById('cart-icon-bubble');
-if (cartBtn) {
-  const clone = cartBtn.cloneNode(true);
-  cartBtn.parentNode.replaceChild(clone, cartBtn);
-  clone.addEventListener('click', function(e) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    toggleDrawer();
-  }, true);
-}
-
-// Intercepter tous les autres clics vers le panier
-document.addEventListener('click', function(e) {
-  const cartLink = e.target.closest('a[href="/cart"], .header__icon--cart');
-  if (cartLink && cartLink.id !== 'cart-icon-bubble') {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    toggleDrawer();
-  }
-}, true);
 
 })();

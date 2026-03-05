@@ -901,29 +901,3 @@ body.ml-drawer-open { overflow: hidden; }
 .ml-btn-cart-page:hover { color: #111111; }
 }
 
-cart-drawer,
-#CartDrawer,
-.cart-drawer,
-cart-notification,
-#CartNotification {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-
-.ml-drawer {
-  left: auto !important;
-}
-
-.ml-drawer.is-open {
-  right: 0 !important;
-  left: auto !important;
-}
-
-cart-drawer[style*="display: none"] {
-  display: none !important;
-}
-
-#CartDrawer {
-  display: none !important;
-}

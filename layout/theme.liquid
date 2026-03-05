@@ -304,7 +304,9 @@
       {{ 'accessibility.skip_to_text' | t }}
     </a>
 
-    {%- comment -%} Drawer natif désactivé — remplacé par mylab-cart-drawer {%- endcomment -%}
+    {%- if settings.cart_type == 'drawer' -%}
+      {%- render 'cart-drawer' -%}
+    {%- endif -%}
 
     {% sections 'header-group' %}
 
@@ -368,9 +370,8 @@
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
-    {%- comment -%} cart-drawer.js désactivé — remplacé par mylab-product.js {%- endcomment -%}
-
-    {% section 'mylab-cart-drawer' %}
-    <script src="{{ 'mylab-product.js' | asset_url }}" defer="defer"></script>
+    {%- if settings.cart_type == 'drawer' -%}
+      <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
   </body>
 </html>
