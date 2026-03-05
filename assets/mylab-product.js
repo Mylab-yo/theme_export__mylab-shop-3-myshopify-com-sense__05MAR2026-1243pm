@@ -307,6 +307,9 @@
       try {
         const senseDrawer = document.querySelector('cart-drawer');
         if (senseDrawer && typeof senseDrawer.renderContents === 'function') {
+          senseDrawer.classList.remove('is-empty');
+          const drawerItems = senseDrawer.querySelector('cart-drawer-items');
+          if (drawerItems) drawerItems.classList.remove('is-empty');
           senseDrawer.renderContents(parsedState);
         } else if (senseDrawer && typeof senseDrawer.open === 'function') {
           senseDrawer.open();
