@@ -299,24 +299,6 @@
 
       const parsedState = await response.json();
 
-      // Mettre à jour le HTML du drawer et de la bulle panier
-      if (parsedState.sections) {
-        const cartDrawerEl = document.getElementById('CartDrawer');
-        if (cartDrawerEl && parsedState.sections['cart-drawer']) {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(parsedState.sections['cart-drawer'], 'text/html');
-          const newContent = doc.getElementById('CartDrawer');
-          if (newContent) cartDrawerEl.innerHTML = newContent.innerHTML;
-        }
-        const bubbleEl = document.getElementById('cart-icon-bubble');
-        if (bubbleEl && parsedState.sections['cart-icon-bubble']) {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(parsedState.sections['cart-icon-bubble'], 'text/html');
-          const newBubble = doc.getElementById('cart-icon-bubble');
-          if (newBubble) bubbleEl.innerHTML = newBubble.innerHTML;
-        }
-      }
-
       btn.classList.remove('is-loading');
       btn.classList.add('is-success');
       const textEl = btn.querySelector('.ml-btn-cart__text');
@@ -324,7 +306,11 @@
 
       try {
         const senseDrawer = document.querySelector('cart-drawer');
-        if (senseDrawer && typeof senseDrawer.open === 'function') senseDrawer.open();
+        if (senseDrawer && typeof senseDrawer.renderContents === 'function') {
+          senseDrawer.renderContents(parsedState);
+        } else if (senseDrawer && typeof senseDrawer.open === 'function') {
+          senseDrawer.open();
+        }
       } catch (drawerErr) {
         console.warn('MyLab: impossible d\'ouvrir le drawer', drawerErr);
       }
