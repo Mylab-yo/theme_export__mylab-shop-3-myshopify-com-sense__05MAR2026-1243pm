@@ -79,13 +79,13 @@
 
               <tbody>
                 {%- for item in cart.items -%}
-                  <tr
+                  <tr data-cart-item-key='{{ item.key }}'
                     class="cart-item {% if item.parent_relationship.parent != null %}cart-item__nested-line{% endif %}"
                     id="CartItem-{{ item.index | plus: 1 }}"
                     {% if item.parent_relationship.parent != null %}
                       aria-label="{{- 'products.product.nested_label' | t: title: item.product.title, parent_title: item.parent_relationship.parent.title | escape -}}"
                     {% endif %}
-                  >
+                   data-cart-item-key="{{ item.key }}">
                     <td class="cart-item__media">
                       {% if item.image %}
                         {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
@@ -115,20 +115,20 @@
                           <span class="visually-hidden">
                             {{ 'products.product.price.regular_price' | t }}
                           </span>
-                          <s class="cart-item__old-price product-option">
+                          <s class="cart-item__old-price product-option" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-item-original-price>
                             {{- item.original_price | money -}}
-                          </s>
+                          </s><div class="bss-b2b-qb-table"></div>
                           <span class="visually-hidden">
                             {{ 'products.product.price.sale_price' | t }}
                           </span>
-                          <strong class="cart-item__final-price product-option">
+                          <strong class="cart-item__final-price product-option" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-item-final-price>
                             {{ item.final_price | money }}
-                          </strong>
+                          </strong><div class="bss-b2b-qb-table"></div>
                         </div>
                       {%- else -%}
-                        <div class="product-option">
+                        <div class="product-option" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-item-original-price>
                           {{ item.original_price | money }}
-                        </div>
+                        </div><div class="bss-b2b-qb-table"></div>
                       {%- endif -%}
 
                       {%- if item.product.has_only_default_variant == false
@@ -138,6 +138,7 @@
                         <dl>
                           {%- if item.product.has_only_default_variant == false -%}
                             {%- for option in item.options_with_values -%}
+                              <div class='bss-b2b-qb-table'></div>
                               <div class="product-option">
                                 <dt>{{ option.name }}:</dt>
                                 <dd>{{ option.value }}</dd>
@@ -186,19 +187,19 @@
                               {{ 'products.product.price.regular_price' | t }}
                             </dt>
                             <dd>
-                              <s class="cart-item__old-price price price--end">
+                              <s class="cart-item__old-price price price--end" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-final-line-price>
                                 {{ item.original_line_price | money }}
                               </s>
                             </dd>
                             <dt class="visually-hidden">
                               {{ 'products.product.price.sale_price' | t }}
                             </dt>
-                            <dd class="price price--end">
+                            <dd class="price price--end" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-final-line-price>
                               {{ item.final_line_price | money }}
                             </dd>
                           </dl>
                         {%- else -%}
-                          <span class="price price--end">
+                          <span class="price price--end" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-final-line-price>
                             {{ item.original_line_price | money }}
                           </span>
                         {%- endif -%}
@@ -378,7 +379,7 @@
                                   <li>
                                     <span>{{ item.variant.quantity_rule.min }}+</span>
                                     {%- assign price = item.variant.price | money_with_currency -%}
-                                    <span> {{ 'sections.quick_order_list.each' | t: money: price }}</span>
+                                    <span bss-b2b-product-id="{{ card_product.id }}" bss-b2b-product-price bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-featured-product="true" > {{ 'sections.quick_order_list.each' | t: money: price }}</span>
                                   </li>
                                   {%- for price_break in item.variant.quantity_price_breaks -%}
                                     <li>
@@ -387,7 +388,7 @@
                                         <span aria-hidden="true">+</span></span
                                       >
                                       {%- assign price = price_break.price | money_with_currency -%}
-                                      <span> {{ 'sections.quick_order_list.each' | t: money: price }}</span>
+                                      <span bss-b2b-product-id="{{ card_product.id }}" bss-b2b-product-price bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-featured-product="true" > {{ 'sections.quick_order_list.each' | t: money: price }}</span>
                                     </li>
                                   {%- endfor -%}
                                 </ul>
@@ -413,19 +414,19 @@
                               {{ 'products.product.price.regular_price' | t }}
                             </dt>
                             <dd>
-                              <s class="cart-item__old-price price price--end">
+                              <s class="cart-item__old-price price price--end" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-final-line-price>
                                 {{ item.original_line_price | money }}
                               </s>
                             </dd>
                             <dt class="visually-hidden">
                               {{ 'products.product.price.sale_price' | t }}
                             </dt>
-                            <dd class="price price--end">
+                            <dd class="price price--end" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-final-line-price>
                               {{ item.final_line_price | money }}
                             </dd>
                           </dl>
                         {%- else -%}
-                          <span class="price price--end">
+                          <span class="price price--end" bss-b2b-cart-item-key="{{ item.key }}" bss-b2b-final-line-price>
                             {{ item.original_line_price | money }}
                           </span>
                         {%- endif -%}

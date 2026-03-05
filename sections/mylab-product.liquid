@@ -1,0 +1,181 @@
+{% comment %}
+  MyLab Shop — Section fiche produit custom
+  Fichier : sections/mylab-product.liquid
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'mylab-product.css' | asset_url }}">
+
+{%- assign product_handle = request.path | remove: '/products/' -%}
+{%- assign product = product | default: all_products[product_handle] -%}
+
+<div class="ml-product" data-product-id="{{ product.id }}">
+
+  {%- comment -%} ====== IMAGE GALLERY ====== {%- endcomment -%}
+  <div class="ml-product__gallery">
+    <div class="ml-gallery__main">
+      <div class="ml-gallery__slide is-active">
+        {% if product.featured_image %}
+          <img
+            src="{{ product.featured_image | image_url: width: 800 }}"
+            alt="{{ product.featured_image.alt | escape }}"
+            loading="eager"
+            width="800"
+          >
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag: 'ml-placeholder-img' }}
+        {% endif %}
+      </div>
+    </div>
+
+    {% if product.images.size > 1 %}
+    <div class="ml-gallery__thumbs">
+      {% for image in product.images limit: 5 %}
+        <button class="ml-gallery__thumb {% if forloop.first %}is-active{% endif %}"
+                data-index="{{ forloop.index0 }}">
+          <img src="{{ image | image_url: width: 120 }}" alt="{{ image.alt | escape }}" loading="lazy">
+        </button>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if product.tags contains 'bestseller' %}
+      <div class="ml-badge">Bestseller</div>
+    {% endif %}
+  </div>
+
+  {%- comment -%} ====== INFO PRODUIT ====== {%- endcomment -%}
+  <div class="ml-product__info">
+
+    <div class="ml-product__brand">{{ product.vendor }}</div>
+
+    <h1 class="ml-product__title">{{ product.title }}</h1>
+
+    {% if product.metafields.custom.subtitle %}
+      <div class="ml-product__subtitle">{{ product.metafields.custom.subtitle }}</div>
+    {% endif %}
+
+    <div class="ml-divider"></div>
+
+    {%- comment -%} ====== SÉLECTEUR CONTENANCE ====== {%- endcomment -%}
+    {%- assign contenance_handles = 'shampoing-nourrissant|shampoing-nourrissant-500ml|shampoing-nourrissant-1000-ml' | split: '|' -%}
+    {%- assign contenance_labels = '200ml|500ml|1000ml' | split: '|' -%}
+    <div class="ml-option-group">
+      <div class="ml-option-label">Contenance</div>
+      <div class="ml-contenance-btns" role="group" aria-label="Sélectionner la contenance">
+        {%- for i in (0..2) -%}
+          {%- assign cont_handle = contenance_handles[i] -%}
+          {%- assign cont_label = contenance_labels[i] -%}
+          {%- assign cont_product = all_products[cont_handle] -%}
+          {%- if cont_product.id != blank -%}
+            {%- assign is_current = false -%}
+            {%- if cont_handle == product.handle -%}{%- assign is_current = true -%}{%- endif -%}
+            <a href="{{ cont_product.url }}"
+               class="ml-contenance-btn {% if is_current %}is-active{% endif %}"
+               data-contenance="{{ cont_label }}"
+               data-variant-id="{{ cont_product.variants.first.id }}"
+               data-price="{{ cont_product.variants.first.price }}"
+               {% if is_current %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}>
+              {{ cont_label }}
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} ====== SÉLECTEUR PALIERS QUANTITÉ ====== {%- endcomment -%}
+    <div class="ml-option-group">
+      <div class="ml-option-label">Quantité — Sélectionnez un palier</div>
+      <div class="ml-qty-btns" id="ml-qty-btns" role="group" aria-label="Sélectionner la quantité">
+        {%- comment -%} Généré dynamiquement par JS selon la contenance {%- endcomment -%}
+      </div>
+    </div>
+
+    {%- comment -%} ====== AFFICHAGE PRIX ====== {%- endcomment -%}
+    <div class="ml-pricing-card">
+      <div class="ml-pricing-card__top">
+        <div class="ml-price-total">
+          <span class="ml-price-amount" id="ml-price-total">—</span>
+          <span class="ml-price-currency">€</span>
+          <span class="ml-price-tax">HT</span>
+        </div>
+        <div class="ml-price-unit">
+          soit <span id="ml-price-unit">—</span> / unité HT
+        </div>
+      </div>
+      <div class="ml-price-savings" id="ml-price-savings">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="7" r="7" fill="#4A7C59"/>
+          <path d="M4 7l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span id="ml-savings-text"></span>
+      </div>
+    </div>
+
+    {%- comment -%} ====== TABLE RÉCAP PALIERS ====== {%- endcomment -%}
+    <div class="ml-palier-wrap">
+      <table class="ml-palier-table" id="ml-palier-table">
+        <thead>
+          <tr>
+            <th>Palier</th>
+            <th>Prix / unité HT</th>
+            <th>Remise</th>
+          </tr>
+        </thead>
+        <tbody id="ml-palier-body"></tbody>
+      </table>
+    </div>
+
+    {%- comment -%} ====== CTA ====== {%- endcomment -%}
+    <div class="ml-cta">
+      <button
+        class="ml-btn-cart"
+        id="ml-btn-cart"
+        data-product-id="{{ product.id }}"
+        aria-label="Ajouter au panier"
+      >
+        <span class="ml-btn-cart__text">Ajouter au panier</span>
+        <span class="ml-btn-cart__pill" id="ml-cart-pill">—</span>
+      </button>
+    </div>
+
+    {%- comment -%} ====== TRUST BADGES ====== {%- endcomment -%}
+    <div class="ml-trust">
+      <div class="ml-trust__item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <span>Livraison 24–48h</span>
+      </div>
+      <div class="ml-trust__item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+        <span>Paiement sécurisé</span>
+      </div>
+      <div class="ml-trust__item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3l-4 4-4-4"/></svg>
+        <span>Stock disponible</span>
+      </div>
+    </div>
+
+    {%- comment -%} ====== DESCRIPTION ====== {%- endcomment -%}
+    {% if product.description != blank %}
+      <div class="ml-description">
+        <button class="ml-desc-toggle" aria-expanded="false">
+          <span>Description du produit</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <div class="ml-desc-content">
+          {{ product.description }}
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<script src="{{ 'mylab-product.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "MyLab — Fiche produit",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

@@ -53,9 +53,10 @@
       "
       style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
     >
+      <div class="bss-qb-collection-table"></div>
       <div
         class="card__inner {% if settings.card_style == 'standard' %}color-{{ settings.card_color_scheme }} gradient{% endif %}{% if card_product.featured_media or settings.card_style == 'standard' %} ratio{% endif %}"
-        style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+        style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%; bss-b2b-product-qb-id="{{ product.id }}""
       >
         {%- if card_product.featured_media -%}
           <div class="card__media{% if image_shape and image_shape != 'default' %} shape--{{ image_shape }} color-{{ settings.card_color_scheme }} gradient{% endif %}">
@@ -204,7 +205,7 @@
               </p>
             {%- endif -%}
 
-            {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+            {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div>
             {%- if card_product.quantity_price_breaks_configured? -%}
               {% if card_product.variants_count == 1 and quick_add == 'bulk' %}
                 {% liquid
@@ -267,7 +268,7 @@
                           {%- assign price = card_product.selected_or_first_available_variant.price
                             | money_with_currency
                           -%}
-                          <span>{{ 'sections.quick_order_list.each' | t: money: price }}</span>
+                          <span bss-b2b-product-id="{{ card_product.id }}" bss-b2b-product-price bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-featured-product="true" >{{ 'sections.quick_order_list.each' | t: money: price }}</span>
                         </li>
                         {%- for price_break in card_product.selected_or_first_available_variant.quantity_price_breaks -%}
                           <li>
@@ -276,7 +277,7 @@
                               <span aria-hidden="true">+</span></span
                             >
                             {%- assign price = price_break.price | money_with_currency -%}
-                            <span> {{ 'sections.quick_order_list.each' | t: money: price }}</span>
+                            <span bss-b2b-product-id="{{ card_product.id }}" bss-b2b-product-price bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-featured-product="true" > {{ 'sections.quick_order_list.each' | t: money: price }}</span>
                           </li>
                         {%- endfor -%}
                       </ul>
@@ -344,7 +345,7 @@
                   class: 'form',
                   novalidate: 'novalidate',
                   data-type: 'add-to-cart-form'
-                -%}
+                -%} <div class='bss-b2b-qb-table'></div>
                   <input
                     type="hidden"
                     name="id"
@@ -512,7 +513,7 @@
                         <a href="{{ card_product.url }}" class="full-unstyled-link">
                           <h3>{{ card_product.title | escape }}</h3>
                         </a>
-                        {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+                        {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div>
                         {%- if card_product.quantity_price_breaks_configured? -%}
                           <div class="card__information-volume-pricing-note">
                             <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
@@ -527,7 +528,7 @@
                             {{ card_product.title | escape }}
                           </h3>
                         </a>
-                        {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+                        {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div>
                         {%- if card_product.quantity_price_breaks_configured? -%}
                           <div class="card__information-volume-pricing-note">
                             <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
