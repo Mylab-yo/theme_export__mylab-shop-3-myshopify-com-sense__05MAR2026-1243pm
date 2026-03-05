@@ -135,7 +135,11 @@
                 {%- endif -%}
                 <div {{ block.shopify_attributes }}>
                   {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+<<<<<<< HEAD
                   {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%} <div class='bss-b2b-qb-table'></div> <div class='bss-b2b-qb-table-on-quick-view'></div> <div class='bss-b2b-qb-table'></div>
+=======
+                  {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%} <div class='bss-b2b-qb-table'></div>
+>>>>>>> 71e0c5ccb7d8bd3464362d1f60f1b42d7cbd4f9f
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
                     {{ form | payment_terms }}
                   {%- endform -%}

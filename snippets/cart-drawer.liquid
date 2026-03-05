@@ -125,7 +125,7 @@
                         {% if item.parent_relationship.parent != null %}
                           aria-label="{{- 'products.product.nested_label' | t: title: item.product.title, parent_title: item.parent_relationship.parent.title | escape -}}"
                         {% endif %}
-                      >
+                       data-cart-item-key="{{ item.key }}">
                         <td
                           class="cart-item__media"
                           role="cell"
