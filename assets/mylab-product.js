@@ -288,10 +288,34 @@
       const response = await fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-        body: JSON.stringify({ items: [{ id: state.selectedVariantId, quantity: state.selectedQty }] })
+        body: JSON.stringify({
+          items: [{ id: state.selectedVariantId, quantity: state.selectedQty }],
+          sections: ['cart-drawer', 'cart-icon-bubble'],
+          sections_url: window.location.pathname
+        })
       });
 
       if (!response.ok) throw new Error('Erreur ajout panier');
+
+      const parsedState = await response.json();
+
+      // Mettre à jour le HTML du drawer et de la bulle panier
+      if (parsedState.sections) {
+        const cartDrawerEl = document.getElementById('CartDrawer');
+        if (cartDrawerEl && parsedState.sections['cart-drawer']) {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(parsedState.sections['cart-drawer'], 'text/html');
+          const newContent = doc.getElementById('CartDrawer');
+          if (newContent) cartDrawerEl.innerHTML = newContent.innerHTML;
+        }
+        const bubbleEl = document.getElementById('cart-icon-bubble');
+        if (bubbleEl && parsedState.sections['cart-icon-bubble']) {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(parsedState.sections['cart-icon-bubble'], 'text/html');
+          const newBubble = doc.getElementById('cart-icon-bubble');
+          if (newBubble) bubbleEl.innerHTML = newBubble.innerHTML;
+        }
+      }
 
       btn.classList.remove('is-loading');
       btn.classList.add('is-success');
@@ -300,13 +324,7 @@
 
       try {
         const senseDrawer = document.querySelector('cart-drawer');
-        if (senseDrawer) {
-          if (typeof senseDrawer.open === 'function') {
-            senseDrawer.open();
-          } else {
-            document.dispatchEvent(new CustomEvent('cart:open'));
-          }
-        }
+        if (senseDrawer && typeof senseDrawer.open === 'function') senseDrawer.open();
       } catch (drawerErr) {
         console.warn('MyLab: impossible d\'ouvrir le drawer', drawerErr);
       }
