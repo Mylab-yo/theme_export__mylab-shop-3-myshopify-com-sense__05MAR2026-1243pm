@@ -305,9 +305,11 @@
       {{ 'accessibility.skip_to_text' | t }}
     </a>
 
+    {%- comment -%}
     {%- if settings.cart_type == 'drawer' -%}
       {%- render 'cart-drawer' -%}
     {%- endif -%}
+    {%- endcomment -%}
 
     {% sections 'header-group' %}
 
