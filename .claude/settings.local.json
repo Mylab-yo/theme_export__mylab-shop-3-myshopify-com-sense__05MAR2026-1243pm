@@ -5,7 +5,8 @@
       "Bash(shopify theme:*)",
       "Bash(grep:*)",
       "Read(//c/Users/startec/**)",
-      "Read(//c/Users/startec/Desktop/**)"
+      "Read(//c/Users/startec/Desktop/**)",
+      "Bash(sed:*)"
     ]
   }
 }
