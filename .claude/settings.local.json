@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(shopify theme:*)",
+      "Bash(grep:*)",
+      "Read(//c/Users/startec/**)",
+      "Read(//c/Users/startec/Desktop/**)"
+    ]
+  }
+}
