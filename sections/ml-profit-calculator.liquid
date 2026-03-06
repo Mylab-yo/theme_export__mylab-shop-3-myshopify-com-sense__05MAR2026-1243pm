@@ -712,7 +712,7 @@
 
   function updateSlider(product) {
     var minQty    = product.tiers[0].qty;
-    var maxSlider = product.maxQty || product.tiers[product.tiers.length - 1].qty * 3;
+    var maxSlider = (product.maxQty > 0) ? product.maxQty : product.tiers[product.tiers.length - 1].qty * 3;
 
     elSlider.min   = minQty;
     elSlider.max   = maxSlider;

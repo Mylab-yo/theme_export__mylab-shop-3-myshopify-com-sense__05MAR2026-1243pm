@@ -85,7 +85,8 @@
             "label": "Shampoing Nourrissant",
             "volume": "200 ml",
             "retail_price": 15,
-            "tiers_json": "[{\"qty\":6,\"price\":700},{\"qty\":12,\"price\":665},{\"qty\":24,\"price\":630},{\"qty\":48,\"price\":560},{\"qty\":96,\"price\":500}]"
+            "tiers_json": "[{\"qty\":6,\"price\":700},{\"qty\":12,\"price\":665},{\"qty\":24,\"price\":630},{\"qty\":48,\"price\":560},{\"qty\":96,\"price\":500}]",
+            "max_qty": 250
           }
         },
         "product_Pp97Rf": {
@@ -95,7 +96,8 @@
             "label": "Shampoing Nourrissant",
             "volume": "500 ml",
             "retail_price": 28,
-            "tiers_json": "[{\"qty\":6,\"price\":1490},{\"qty\":14,\"price\":1340},{\"qty\":28,\"price\":1265},{\"qty\":42,\"price\":1190},{\"qty\":54,\"price\":1065}]"
+            "tiers_json": "[{\"qty\":6,\"price\":1490},{\"qty\":14,\"price\":1340},{\"qty\":28,\"price\":1265},{\"qty\":42,\"price\":1190},{\"qty\":54,\"price\":1065}]",
+            "max_qty": 125
           }
         },
         "product_KKNjrC": {
@@ -105,7 +107,8 @@
             "label": "Shampoing Nourrissant",
             "volume": "1000 ml",
             "retail_price": 45,
-            "tiers_json": "[{\"qty\":1,\"price\":2490},{\"qty\":3,\"price\":2365},{\"qty\":6,\"price\":2100},{\"qty\":9,\"price\":1990},{\"qty\":12,\"price\":1865}]"
+            "tiers_json": "[{\"qty\":1,\"price\":2490},{\"qty\":3,\"price\":2365},{\"qty\":6,\"price\":2100},{\"qty\":9,\"price\":1990},{\"qty\":12,\"price\":1865}]",
+            "max_qty": 50
           }
         }
       },
