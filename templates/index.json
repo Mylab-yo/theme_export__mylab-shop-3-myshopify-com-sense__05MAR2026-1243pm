@@ -81,7 +81,7 @@
         "product_9zPUxM": {
           "type": "product",
           "settings": {
-            "product": "",
+            "product": "shampoing-nourrissant",
             "label": "Shampoing Nourrissant",
             "volume": "200 ml",
             "retail_price": 15,
@@ -92,7 +92,7 @@
         "product_Pp97Rf": {
           "type": "product",
           "settings": {
-            "product": "",
+            "product": "shampoing-nourrissant-500ml",
             "label": "Shampoing Nourrissant",
             "volume": "500 ml",
             "retail_price": 28,
@@ -103,7 +103,7 @@
         "product_KKNjrC": {
           "type": "product",
           "settings": {
-            "product": "",
+            "product": "shampoing-nourrissant-1000-ml",
             "label": "Shampoing Nourrissant",
             "volume": "1000 ml",
             "retail_price": 45,
