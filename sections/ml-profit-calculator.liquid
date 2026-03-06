@@ -560,8 +560,7 @@
             "retailPrice": {{ block.settings.retail_price | times: 100 | round }},
             "url": {% if block.settings.product != blank %}{{ block.settings.product.url | json }}{% else %}"#"{% endif %},
             "image": {% if block.settings.product != blank and block.settings.product.featured_image != blank %}{{ block.settings.product.featured_image | image_url: width: 200 | json }}{% else %}null{% endif %},
-            "tiers": {{ block.settings.tiers_json }},
-            "maxQty": {{ block.settings.max_qty }}
+            "tiers": {{ block.settings.tiers_json }}
           }{% unless forloop.last %},{% endunless %}
         {%- endif -%}
       {%- endfor -%}
@@ -712,7 +711,8 @@
 
   function updateSlider(product) {
     var minQty    = product.tiers[0].qty;
-    var maxSlider = (product.maxQty > 0) ? product.maxQty : product.tiers[product.tiers.length - 1].qty * 3;
+    var maxTier   = product.tiers[product.tiers.length - 1].qty;
+    var maxSlider = maxTier * 3;
 
     elSlider.min   = minQty;
     elSlider.max   = maxSlider;
@@ -967,12 +967,6 @@
           "label": "Paliers de prix (JSON)",
           "info": "Format : [{\"qty\":6,\"price\":700},{\"qty\":12,\"price\":665}] — prix en centimes (700 = 7,00 €)",
           "default": "[{\"qty\":6,\"price\":700},{\"qty\":12,\"price\":665},{\"qty\":24,\"price\":630},{\"qty\":48,\"price\":560},{\"qty\":96,\"price\":500}]"
-        },
-        {
-          "type": "number",
-          "id": "max_qty",
-          "label": "Quantité maximale du slider",
-          "default": 250
         }
       ]
     }
@@ -987,8 +981,7 @@
             "label": "Shampoing Nourrissant",
             "volume": "200 ml",
             "retail_price": 15,
-            "tiers_json": "[{\"qty\":6,\"price\":700},{\"qty\":12,\"price\":665},{\"qty\":24,\"price\":630},{\"qty\":48,\"price\":560},{\"qty\":96,\"price\":500}]",
-            "max_qty": 250
+            "tiers_json": "[{\"qty\":6,\"price\":700},{\"qty\":12,\"price\":665},{\"qty\":24,\"price\":630},{\"qty\":48,\"price\":560},{\"qty\":96,\"price\":500}]"
           }
         },
         {
@@ -997,8 +990,7 @@
             "label": "Shampoing Nourrissant",
             "volume": "500 ml",
             "retail_price": 28,
-            "tiers_json": "[{\"qty\":6,\"price\":1490},{\"qty\":14,\"price\":1340},{\"qty\":28,\"price\":1265},{\"qty\":42,\"price\":1190},{\"qty\":54,\"price\":1065}]",
-            "max_qty": 125
+            "tiers_json": "[{\"qty\":6,\"price\":1490},{\"qty\":14,\"price\":1340},{\"qty\":28,\"price\":1265},{\"qty\":42,\"price\":1190},{\"qty\":54,\"price\":1065}]"
           }
         },
         {
@@ -1007,8 +999,7 @@
             "label": "Shampoing Nourrissant",
             "volume": "1000 ml",
             "retail_price": 45,
-            "tiers_json": "[{\"qty\":1,\"price\":2490},{\"qty\":3,\"price\":2365},{\"qty\":6,\"price\":2100},{\"qty\":9,\"price\":1990},{\"qty\":12,\"price\":1865}]",
-            "max_qty": 50
+            "tiers_json": "[{\"qty\":1,\"price\":2490},{\"qty\":3,\"price\":2365},{\"qty\":6,\"price\":2100},{\"qty\":9,\"price\":1990},{\"qty\":12,\"price\":1865}]"
           }
         }
       ]
