@@ -352,6 +352,169 @@
     margin-top: 1.6rem;
     line-height: 1.6;
   }
+
+  /* ============================================================
+     RESPONSIVE — Tablette (≤ 989px)
+     ============================================================ */
+  @media screen and (max-width: 989px) {
+    .ml-calc {
+      padding: 0 2.4rem;
+    }
+
+    .ml-calc__intro {
+      text-align: center;
+    }
+
+    .ml-calc__intro-desc {
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .ml-calc__intro-badges {
+      justify-content: center;
+    }
+
+    .ml-calc__intro-title {
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+    }
+  }
+
+  /* ============================================================
+     RESPONSIVE — Mobile (≤ 749px)
+     ============================================================ */
+  @media screen and (max-width: 749px) {
+    .ml-calc {
+      padding: 0 1.6rem;
+      gap: 3.2rem;
+    }
+
+    /* Carte : padding réduit */
+    .ml-calc__card {
+      padding: 2rem 1.8rem;
+      border-radius: 18px;
+    }
+
+    /* Sélecteur produit : flèches plus grandes (touch target 44px) */
+    .ml-calc__arrow {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+
+    .ml-calc__product-selector {
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    .ml-calc__product-img,
+    .ml-calc__product-placeholder {
+      width: 48px;
+      height: 48px;
+    }
+
+    .ml-calc__product-name {
+      font-size: 1.4rem;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    /* Slider : thumb plus grand pour le touch */
+    .ml-calc__slider {
+      height: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .ml-calc__slider::-webkit-slider-thumb {
+      width: 28px;
+      height: 28px;
+    }
+
+    .ml-calc__slider::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+    }
+
+    .ml-calc__slider-badge {
+      font-size: 1.4rem;
+      padding: 5px 14px;
+    }
+
+    .ml-calc__tier-hint {
+      font-size: 1.15rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Onglets : texte légèrement réduit */
+    .ml-calc__tab {
+      font-size: 1.2rem;
+      padding: 8px 10px;
+    }
+
+    /* Lignes résultats : passage en colonne si texte long */
+    .ml-calc__row {
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .ml-calc__row-label {
+      font-size: 1.3rem;
+      flex: 1 1 55%;
+    }
+
+    .ml-calc__row-value {
+      font-size: 1.35rem;
+      text-align: right;
+      flex: 0 0 auto;
+    }
+
+    .ml-calc__row--total .ml-calc__row-label {
+      font-size: 1.5rem;
+    }
+
+    .ml-calc__row--total .ml-calc__row-value {
+      font-size: 1.6rem;
+    }
+
+    /* CTA : padding généreux pour le touch */
+    .ml-calc__cta {
+      padding: 1.6rem 2rem;
+      font-size: 1.45rem;
+    }
+
+    /* Titre intro */
+    .ml-calc__intro-title {
+      font-size: clamp(2.4rem, 7vw, 3.2rem);
+    }
+
+    .ml-calc__intro-desc {
+      font-size: 1.5rem;
+    }
+  }
+
+  /* ============================================================
+     RESPONSIVE — Très petit mobile (≤ 390px)
+     ============================================================ */
+  @media screen and (max-width: 390px) {
+    .ml-calc {
+      padding: 0 1.2rem;
+    }
+
+    .ml-calc__card {
+      padding: 1.6rem 1.4rem;
+    }
+
+    .ml-calc__tabs {
+      flex-direction: column;
+      border-radius: 14px;
+    }
+
+    .ml-calc__tab {
+      border-radius: 10px;
+      text-align: center;
+    }
+  }
 </style>
 
 {%- comment -%} Données produits injectées pour le JS {%- endcomment -%}
