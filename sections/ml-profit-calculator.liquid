@@ -21,10 +21,17 @@
      CALCULATEUR DE PROFIT — MyLab
      ============================================================ */
 
+  .ml-calc-section {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
   .ml-calc {
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 3rem;
+    box-sizing: border-box;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 6rem;
@@ -537,7 +544,7 @@
   }
 </script>
 
-<section class="color-{{ section.settings.color_scheme }} gradient">
+<section class="ml-calc-section color-{{ section.settings.color_scheme }} gradient">
   <div class="ml-calc">
 
     {%- comment -%} ===== INTRO GAUCHE ===== {%- endcomment -%}
