@@ -258,9 +258,10 @@
     color: #ffffff;
   }
 
-  .ml-header__cart svg {
-    width: 17px;
-    height: 17px;
+  .ml-header__cart svg,
+  .ml-header__cart .svg-wrapper svg {
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
     stroke: currentColor;
     fill: none;
@@ -272,7 +273,7 @@
     height: auto;
     background: none;
     color: inherit;
-    font-size: 1.35rem;
+    font-size: 1.4rem;
     font-weight: 700;
     border-radius: 0;
     display: inline;
@@ -439,8 +440,6 @@
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   assign header_tag = 'div'
@@ -569,20 +568,23 @@
       </button>
 
       {%- comment -%} Panier {%- endcomment -%}
+      {%- comment -%}
+        id="cart-icon-bubble" retiré pour éviter l'interception BSS B2B (miniCartMutateHandle).
+        Un span caché conserve l'ID pour les mises à jour de compteur des apps tierces.
+      {%- endcomment -%}
+      <span id="cart-icon-bubble" class="visually-hidden" aria-hidden="true" style="display:none">
+        <span class="cart-count-bubble">{{ cart.item_count }}</span>
+      </span>
       <a
         href="{{ routes.cart_url }}"
         class="ml-header__cart link focus-inset"
-        id="cart-icon-bubble"
+        id="ml-cart-btn"
         aria-label="{{ 'templates.cart.cart' | t }}"
       >
-        {%- if cart != empty -%}
-          <span class="svg-wrapper">{{- 'icon-cart.svg' | inline_asset_content -}}</span>
-          <span class="cart-count-bubble" aria-hidden="true">
-            {%- if cart.item_count < 100 -%}{{ cart.item_count }}{%- else -%}99+{%- endif -%}
-          </span>
-        {%- else -%}
-          <span class="svg-wrapper">{{- 'icon-cart-empty.svg' | inline_asset_content -}}</span>
-        {%- endif -%}
+        <span class="svg-wrapper">{{- 'icon-cart.svg' | inline_asset_content -}}</span>
+        <span class="ml-cart-count" aria-hidden="true"{% if cart.item_count == 0 %} style="display:none"{% endif %}>
+          {%- if cart.item_count < 100 -%}{{ cart.item_count }}{%- else -%}99+{%- endif -%}
+        </span>
         <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
       </a>
 
@@ -742,6 +744,78 @@
   }
 
   customElements.define('sticky-header', StickyHeader);
+
+  // ── Panier tiroir MyLab — global (toutes pages) ──────────
+  (function() {
+    function mlOpen() {
+      var drawer  = document.getElementById('ml-cart-drawer');
+      var overlay = document.getElementById('ml-drawer-overlay');
+      if (!drawer) return;
+      drawer.style.cssText = '';          /* reset tout style inline résiduel */
+      drawer.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      if (overlay) { overlay.classList.add('is-visible'); overlay.setAttribute('aria-hidden', 'false'); }
+      document.body.classList.add('ml-drawer-open');
+    }
+
+    function mlClose() {
+      var drawer  = document.getElementById('ml-cart-drawer');
+      var overlay = document.getElementById('ml-drawer-overlay');
+      if (drawer)  { drawer.style.cssText = ''; drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden', 'true'); }
+      if (overlay) { overlay.classList.remove('is-visible'); overlay.setAttribute('aria-hidden', 'true'); }
+      document.body.classList.remove('ml-drawer-open');
+    }
+
+    function mlToggle() {
+      var drawer = document.getElementById('ml-cart-drawer');
+      if (drawer && drawer.classList.contains('is-open')) {
+        mlClose();
+      } else {
+        if (window.MylabCart && window.MylabCart.refresh) {
+          window.MylabCart.refresh().then(mlOpen);
+        } else {
+          mlOpen();
+        }
+      }
+    }
+
+    window.MylabCart = window.MylabCart || {};
+    window.MylabCart.open  = mlOpen;
+    window.MylabCart.close = mlClose;
+
+    function initMlCartListeners() {
+      // Interception au niveau document (capture)
+      document.addEventListener('click', function(e) {
+        // Clic sur le bouton panier (nouvel ID hors radar BSS)
+        if (e.target.closest('#ml-cart-btn') && document.getElementById('ml-cart-drawer')) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          mlToggle();
+          return;
+        }
+        // Clic sur l'overlay du tiroir
+        if (e.target.id === 'ml-drawer-overlay') {
+          mlClose();
+          return;
+        }
+        // Clic sur le bouton fermer
+        if (e.target.closest('#ml-drawer-close')) {
+          mlClose();
+        }
+      }, true);
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') mlClose();
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMlCartListeners);
+    } else {
+      initMlCartListeners();
+    }
+  })();
 
   // ── Recherche toggle ──────────────────────────────────────
   (function() {
