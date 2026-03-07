@@ -8,39 +8,6 @@
         "color_scheme": "scheme-1"
       }
     },
-    "ml-collection-filters": {
-      "type": "ml-collection-filters",
-      "blocks": {
-        "gamme": {
-          "type": "filter_group",
-          "settings": {
-            "label": "Gamme",
-            "filter_type": "tag",
-            "values": "Nourrissant | nourrissant ; Volume | volume ; Lissant | lissant ; Boucles | boucles ; Purifiant | purifiant ; Protecteur couleur | protecteur-couleur ; Déjaunisseur | dejaunisseur ; Homme | homme"
-          }
-        },
-        "contenance": {
-          "type": "filter_group",
-          "settings": {
-            "label": "Contenance",
-            "filter_type": "tag",
-            "values": "50 ml | 50ml ; 200 ml | 200ml ; 400 ml | 400ml ; 500 ml | 500ml ; 1000 ml | 1000ml"
-          }
-        },
-        "type": {
-          "type": "filter_group",
-          "settings": {
-            "label": "Type",
-            "filter_type": "product_type",
-            "values": "Shampoing | Shampoing ; Masque | Masque ; Crème | Crème ; Soin | Soin ; Huile | Huile ; Cire | Cire"
-          }
-        }
-      },
-      "block_order": ["gamme", "contenance", "type"],
-      "settings": {
-        "show_sort": true
-      }
-    },
     "main-collection-product-grid": {
       "type": "main-collection-product-grid",
       "settings": {
@@ -53,9 +20,9 @@
         "show_vendor": false,
         "show_rating": false,
         "quick_add": "none",
-        "enable_filtering": false,
+        "enable_filtering": true,
         "filter_type": "horizontal",
-        "enable_sorting": false,
+        "enable_sorting": true,
         "columns_mobile": "2",
         "padding_top": 0,
         "padding_bottom": 68
@@ -64,7 +31,6 @@
   },
   "order": [
     "main-collection-banner",
-    "ml-collection-filters",
     "main-collection-product-grid"
   ]
 }
