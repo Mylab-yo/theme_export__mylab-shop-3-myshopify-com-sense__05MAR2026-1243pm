@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -233,39 +234,175 @@
     border-color: #333333;
   }
 
-  /* Cart icon */
+  /* Cart icon — pill style harmonisé avec les boutons auth */
   .ml-header__cart {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.55rem;
     position: relative;
     color: #111111;
     text-decoration: none;
-    padding: 0.6rem;
-    border-radius: 6px;
-    transition: background 0.15s ease;
+    padding: 0.75rem 1.4rem;
+    border-radius: 50px;
+    border: 1.5px solid #111111;
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1;
+    transition: background 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
   }
 
   .ml-header__cart:hover {
-    background: #f5f5f5;
+    background: #111111;
+    color: #ffffff;
+  }
+
+  .ml-header__cart svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    stroke: currentColor;
+    fill: none;
   }
 
   .ml-header__cart .cart-count-bubble {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 18px;
-    height: 18px;
-    background: #111111;
-    color: #ffffff;
-    font-size: 1rem;
+    position: static;
+    min-width: auto;
+    height: auto;
+    background: none;
+    color: inherit;
+    font-size: 1.35rem;
     font-weight: 700;
-    border-radius: 50px;
-    display: flex;
+    border-radius: 0;
+    display: inline;
+    padding: 0;
+    line-height: 1;
+  }
+
+  /* Bouton loupe — pill outline */
+  .ml-header__search-toggle {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0 4px;
+    background: none;
+    border: 1.5px solid #111111;
+    border-radius: 50px;
+    color: #111111;
+    cursor: pointer;
+    padding: 0.72rem;
+    transition: background 0.15s ease, color 0.15s ease;
     line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .ml-header__search-toggle:hover,
+  .ml-header__search-toggle[aria-expanded="true"] {
+    background: #111111;
+    color: #ffffff;
+  }
+
+  .ml-header__search-toggle svg {
+    display: block;
+  }
+
+  /* Panneau recherche slide-down */
+  .ml-search-panel {
+    background: #ffffff;
+    border-bottom: 1px solid #e8e8e8;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .ml-search-panel.is-open {
+    max-height: 400px;
+  }
+
+  .ml-search-panel__inner {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 1.6rem 3rem 2rem;
+  }
+
+  /* Champ de saisie */
+  .ml-search-panel__field {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1.5px solid #111111;
+    border-radius: 50px;
+    overflow: hidden;
+    background: #ffffff;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .ml-search-panel__field:focus-within {
+    box-shadow: 0 0 0 3px rgba(17,17,17,0.08);
+  }
+
+  .ml-search-panel__field-icon {
+    flex-shrink: 0;
+    padding: 0 0 0 1.6rem;
+    color: #888;
+    display: flex;
+    align-items: center;
+  }
+
+  .ml-search-panel__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 1.1rem 1rem;
+    font-family: inherit;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #111111;
+    min-width: 0;
+  }
+
+  .ml-search-panel__input::placeholder {
+    color: #aaa;
+  }
+
+  .ml-search-panel__reset {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.8rem;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+    flex-shrink: 0;
+  }
+
+  .ml-search-panel__reset:hover { color: #111; }
+  .ml-search-panel__reset.hidden { display: none; }
+
+  .ml-search-panel__submit {
+    flex-shrink: 0;
+    background: #111111;
+    border: none;
+    border-radius: 0 50px 50px 0;
+    cursor: pointer;
+    padding: 1rem 1.6rem;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s;
+  }
+
+  .ml-search-panel__submit:hover { background: #333; }
+
+  /* Résultats prédictifs — override style Sense */
+  .ml-search-panel .predictive-search {
+    border: 1px solid #e8e8e8;
+    border-radius: 1.2rem;
+    margin-top: 0.8rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    overflow: hidden;
   }
 
   /* Mobile hamburger — hide on desktop */
@@ -302,6 +439,8 @@
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   assign header_tag = 'div'
@@ -416,6 +555,19 @@
         {%- endif -%}
       </div>
 
+      {%- comment -%} Bouton recherche {%- endcomment -%}
+      <button
+        class="ml-header__search-toggle"
+        id="ml-search-toggle"
+        aria-label="Rechercher"
+        aria-expanded="false"
+        aria-controls="ml-search-panel"
+      >
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
+
       {%- comment -%} Panier {%- endcomment -%}
       <a
         href="{{ routes.cart_url }}"
@@ -441,6 +593,47 @@
 
     </div>
   </header>
+  {%- comment -%} ===== PANNEAU RECHERCHE ===== {%- endcomment -%}
+  <div class="ml-search-panel" id="ml-search-panel" role="search" aria-label="Recherche">
+    <div class="ml-search-panel__inner">
+      <predictive-search data-loading-text="{{ 'accessibility.loading' | t }}">
+        <form action="{{ routes.search_url }}" method="get">
+          <input type="hidden" name="type" value="product">
+          <div class="ml-search-panel__field">
+            <span class="ml-search-panel__field-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+            </span>
+            <input
+              type="search"
+              name="q"
+              id="ml-search-input"
+              class="ml-search-panel__input"
+              placeholder="Rechercher un produit…"
+              role="combobox"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-owns="predictive-search-results"
+            >
+            <button type="reset" class="ml-search-panel__reset hidden" aria-label="Effacer la recherche">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+            <button type="submit" class="ml-search-panel__submit" aria-label="Lancer la recherche">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <div class="predictive-search predictive-search--header-search" tabindex="-1" data-predictive-search></div>
+          <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+        </form>
+      </predictive-search>
+    </div>
+  </div>
+
 </{{ header_tag }}>
 
 {%- if settings.cart_type == 'notification' -%}
@@ -549,6 +742,43 @@
   }
 
   customElements.define('sticky-header', StickyHeader);
+
+  // ── Recherche toggle ──────────────────────────────────────
+  (function() {
+    var toggle = document.getElementById('ml-search-toggle');
+    var panel  = document.getElementById('ml-search-panel');
+    var input  = document.getElementById('ml-search-input');
+    if (!toggle || !panel) return;
+
+    function openSearch() {
+      panel.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      setTimeout(function() { if (input) input.focus(); }, 310);
+    }
+
+    function closeSearch() {
+      panel.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    toggle.addEventListener('click', function() {
+      if (panel.classList.contains('is-open')) {
+        closeSearch();
+      } else {
+        openSearch();
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && panel.classList.contains('is-open')) closeSearch();
+    });
+
+    document.addEventListener('click', function(e) {
+      if (panel.classList.contains('is-open') && !panel.contains(e.target) && !toggle.contains(e.target)) {
+        closeSearch();
+      }
+    });
+  })();
 {% endjavascript %}
 
 <script type="application/ld+json">
