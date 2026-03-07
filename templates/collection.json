@@ -24,7 +24,7 @@
           "settings": {
             "label": "Contenance",
             "filter_type": "tag",
-            "values": "200 ml | 200ml ; 500 ml | 500ml ; 1000 ml | 1000ml ; 50 ml | 50ml"
+            "values": "50 ml | 50ml ; 200 ml | 200ml ; 400 ml | 400ml ; 500 ml | 500ml ; 1000 ml | 1000ml"
           }
         },
         "type": {
