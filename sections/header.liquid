@@ -12,6 +12,33 @@
      ML HEADER — design selfnamed-style
      ============================================= */
 
+  /* --- Barre d'annonce --- */
+  .ml-announcement {
+    background: #f5f4f2;
+    border-bottom: 1px solid #e8e8e8;
+    text-align: center;
+    padding: 0.9rem 2rem;
+    font-size: 1.3rem;
+    color: #555555;
+    letter-spacing: 0.01em;
+    line-height: 1.5;
+  }
+
+  .ml-announcement p {
+    margin: 0;
+  }
+
+  .ml-announcement a {
+    color: #111111;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .ml-announcement a:hover {
+    color: #333333;
+  }
+
   .ml-header-wrapper {
     background: #ffffff;
     border-bottom: 1px solid #e8e8e8;
@@ -107,8 +134,11 @@
   }
 
   .ml-header__nav-link:hover {
-    background: #f5f5f5;
+    background: transparent;
     color: #000;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
   }
 
   .ml-header__nav-link--active {
@@ -251,6 +281,22 @@
     line-height: 1;
     transition: background 0.15s ease, color 0.15s ease;
     white-space: nowrap;
+  }
+
+  /* Reset styles natifs du navigateur pour <button> */
+  button.ml-header__cart {
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    box-shadow: none !important;
+    outline: none;
+  }
+
+  button.ml-header__cart:focus-visible {
+    outline: 2px solid #111111;
+    outline-offset: 3px;
+    box-shadow: none !important;
   }
 
   .ml-header__cart:hover {
@@ -448,6 +494,18 @@
   endif
 -%}
 
+{%- if section.settings.announcement_text != blank -%}
+  <div class="ml-announcement" role="note">
+    <p>
+      {%- if section.settings.announcement_link != blank -%}
+        <a href="{{ section.settings.announcement_link }}">{{ section.settings.announcement_text }}</a>
+      {%- else -%}
+        {{ section.settings.announcement_text }}
+      {%- endif -%}
+    </p>
+  </div>
+{%- endif -%}
+
 <{{ header_tag }}
   {% if header_tag == 'sticky-header' %}data-sticky-type="{{ section.settings.sticky_header_type }}"{% endif %}
   class="ml-header-wrapper color-{{ section.settings.color_scheme }} gradient"
@@ -575,18 +633,19 @@
       <span id="cart-icon-bubble" class="visually-hidden" aria-hidden="true" style="display:none">
         <span class="cart-count-bubble">{{ cart.item_count }}</span>
       </span>
-      <a
-        href="{{ routes.cart_url }}"
+      <button
+        type="button"
         class="ml-header__cart link focus-inset"
         id="ml-cart-btn"
         aria-label="{{ 'templates.cart.cart' | t }}"
+        onclick="mlCartToggle()"
       >
         <span class="svg-wrapper">{{- 'icon-cart.svg' | inline_asset_content -}}</span>
         <span class="ml-cart-count" aria-hidden="true"{% if cart.item_count == 0 %} style="display:none"{% endif %}>
           {%- if cart.item_count < 100 -%}{{ cart.item_count }}{%- else -%}99+{%- endif -%}
         </span>
         <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-      </a>
+      </button>
 
       {%- comment -%} Hamburger mobile — rendu une seule fois {%- endcomment -%}
       {%- if section.settings.menu != blank -%}
@@ -643,6 +702,34 @@
 {%- endif -%}
 
 {% javascript %}
+  /* ── Tiroir panier — défini en premier pour être disponible dès le chargement ── */
+  window.mlCartToggle = function() {
+    var d = document.getElementById('ml-cart-drawer');
+    var o = document.getElementById('ml-drawer-overlay');
+    if (!d) { window.location = '/cart'; return; }
+    d.style.cssText = '';
+    if (d.classList.contains('is-open')) {
+      d.classList.remove('is-open');
+      d.setAttribute('aria-hidden', 'true');
+      if (o) o.classList.remove('is-visible');
+      document.body.classList.remove('ml-drawer-open');
+    } else {
+      if (window.MylabCart && window.MylabCart.refresh) {
+        window.MylabCart.refresh().then(function() {
+          d.classList.add('is-open');
+          d.setAttribute('aria-hidden', 'false');
+          if (o) o.classList.add('is-visible');
+          document.body.classList.add('ml-drawer-open');
+        });
+      } else {
+        d.classList.add('is-open');
+        d.setAttribute('aria-hidden', 'false');
+        if (o) o.classList.add('is-visible');
+        document.body.classList.add('ml-drawer-open');
+      }
+    }
+  };
+
   class StickyHeader extends HTMLElement {
     constructor() {
       super();
@@ -780,8 +867,9 @@
     }
 
     window.MylabCart = window.MylabCart || {};
-    window.MylabCart.open  = mlOpen;
-    window.MylabCart.close = mlClose;
+    window.MylabCart.open   = mlOpen;
+    window.MylabCart.close  = mlClose;
+    window.MylabCart.toggle = mlToggle;
 
     function initMlCartListeners() {
       // Interception au niveau document (capture)
@@ -901,6 +989,22 @@
   "class": "section-header",
   "max_blocks": 3,
   "settings": [
+    {
+      "type": "header",
+      "content": "Barre d'annonce"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Texte de l'annonce",
+      "info": "Laisser vide pour masquer la barre",
+      "placeholder": "🔥 Inscrivez-vous et bénéficiez de 20% sur votre première commande"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Lien de l'annonce (optionnel)"
+    },
     {
       "type": "select",
       "id": "logo_position",
