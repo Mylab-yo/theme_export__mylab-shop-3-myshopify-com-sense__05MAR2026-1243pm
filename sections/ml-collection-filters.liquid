@@ -330,7 +330,7 @@
   'use strict';
 
   var SID            = {{ section.id | json }};
-  var COLLECTION_URL = {{ collection.url | json }};
+  var COLLECTION_URL = '/collections/all';
 
   /* ================================================================
      UTILITAIRES URL
@@ -339,7 +339,10 @@
      ================================================================ */
 
   function getParams() {
-    return new URLSearchParams(window.location.search);
+    var params = new URLSearchParams(window.location.search);
+    /* Supprime les params internes Shopify (recherche prédictive, etc.) */
+    ['_pos','_psq','_ss','_v'].forEach(function(k) { params.delete(k); });
+    return params;
   }
 
   /* ---- Tags (path-based) ---- */
