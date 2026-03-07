@@ -329,51 +329,32 @@
 (function() {
   'use strict';
 
-  var SID            = {{ section.id | json }};
-  var COLLECTION_URL = '/collections/all';
+  var SID = {{ section.id | json }};
 
   /* ================================================================
-     UTILITAIRES URL
-     Tags   → /collections/handle/tag1+tag2  (natif Shopify, tous plans)
-     Autres → ?filter.p.product_type=...     (via Search & Discovery)
+     UTILITAIRES URL — tous les filtres via ?filter.p.tag= (S&D)
      ================================================================ */
 
   function getParams() {
     var params = new URLSearchParams(window.location.search);
-    /* Supprime les params internes Shopify (recherche prédictive, etc.) */
     ['_pos','_psq','_ss','_v'].forEach(function(k) { params.delete(k); });
     return params;
   }
 
-  /* ---- Tags (path-based) ---- */
-  function getActiveTags() {
-    var parts = window.location.pathname.split('/');
-    // /collections/handle/tag1+tag2  → parts[3]
-    if (parts.length >= 4 && parts[3]) {
-      return parts[3].split('+').filter(Boolean);
-    }
-    return [];
-  }
-
-  function applyTagFilters(newTags) {
-    var params = getParams();
-    params.delete('page');
-    var tagPath = newTags.length > 0 ? '/' + newTags.join('+') : '';
-    var search  = params.toString() ? '?' + params.toString() : '';
-    window.location.href = COLLECTION_URL + tagPath + search;
-  }
-
-  /* ---- Filtres URL params (product_type, vendor via S&D) ---- */
   function paramKey(filterType) {
-    var map = { 'product_type': 'filter.p.product_type', 'vendor': 'filter.p.vendor' };
-    return map[filterType] || 'filter.p.product_type';
+    var map = {
+      'tag':          'filter.p.tag',
+      'product_type': 'filter.p.product_type',
+      'vendor':       'filter.p.vendor'
+    };
+    return map[filterType] || 'filter.p.tag';
   }
 
-  function getActiveParamValues(filterType) {
+  function getActiveValues(filterType) {
     return getParams().getAll(paramKey(filterType));
   }
 
-  function applyParamFilters(filterType, newValues) {
+  function applyFilters(filterType, newValues) {
     var params = getParams();
     var key = paramKey(filterType);
     params.delete(key);
@@ -382,28 +363,20 @@
     window.location.search = params.toString();
   }
 
-  /* ---- Clear tout ---- */
   function clearAllFilters() {
     var params = getParams();
     Array.from(params.keys()).forEach(function(k) {
       if (k.startsWith('filter.')) params.delete(k);
     });
     params.delete('page');
-    // Revenir à l'URL de base sans tags
-    var search = params.toString() ? '?' + params.toString() : '';
-    window.location.href = COLLECTION_URL + search;
+    window.location.search = params.toString();
   }
 
   /* --- Synchronisation des checkboxes avec l'URL active --- */
   function syncCheckboxes() {
-    var activeTags = getActiveTags();
     document.querySelectorAll('#ml-cf-groups-' + SID + ' .ml-cf__checkbox').forEach(function(cb) {
-      var val = decodeURIComponent(cb.dataset.filterValue);
-      if (cb.dataset.filterType === 'tag') {
-        cb.checked = activeTags.indexOf(val) !== -1;
-      } else {
-        cb.checked = getActiveParamValues(cb.dataset.filterType).indexOf(val) !== -1;
-      }
+      var active = getActiveValues(cb.dataset.filterType);
+      cb.checked = active.indexOf(decodeURIComponent(cb.dataset.filterValue)) !== -1;
     });
   }
 
@@ -432,17 +405,6 @@
     var params = getParams();
     var chips  = [];
 
-    /* Chips depuis les tags actifs (path) */
-    getActiveTags().forEach(function(tag) {
-      var label = tag;
-      var cb = document.querySelector(
-        '#ml-cf-groups-' + SID + ' .ml-cf__checkbox[data-filter-type="tag"][data-filter-value="' + encodeURIComponent(tag) + '"]'
-      );
-      if (cb && cb.dataset.filterLabel) label = cb.dataset.filterLabel;
-      chips.push({ type: 'tag', value: tag, label: label });
-    });
-
-    /* Chips depuis les URL params (product_type, vendor) */
     params.forEach(function(value, key) {
       if (key.startsWith('filter.')) {
         var label = value;
@@ -450,7 +412,7 @@
           '#ml-cf-groups-' + SID + ' .ml-cf__checkbox[data-filter-value="' + encodeURIComponent(value) + '"]'
         );
         if (cb && cb.dataset.filterLabel) label = cb.dataset.filterLabel;
-        chips.push({ type: 'param', key: key, value: value, label: label });
+        chips.push({ key: key, value: value, label: label });
       }
     });
 
@@ -462,24 +424,20 @@
 
     container.style.display = 'flex';
     container.innerHTML = chips.map(function(c) {
-      return '<button class="ml-cf__chip" data-chip-type="' + c.type + '" data-key="' + (c.key || '') + '" data-value="' + c.value + '">' +
+      return '<button class="ml-cf__chip" data-key="' + c.key + '" data-value="' + encodeURIComponent(c.value) + '">' +
              c.label + '<span class="ml-cf__chip-x" aria-hidden="true">×</span></button>';
     }).join('') + '<button class="ml-cf__chip-clear">Tout effacer</button>';
 
     /* Supprime un chip */
     container.querySelectorAll('.ml-cf__chip').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        if (btn.dataset.chipType === 'tag') {
-          var newTags = getActiveTags().filter(function(t) { return t !== btn.dataset.value; });
-          applyTagFilters(newTags);
-        } else {
-          var params = getParams();
-          var kept = params.getAll(btn.dataset.key).filter(function(v) { return v !== btn.dataset.value; });
-          params.delete(btn.dataset.key);
-          kept.forEach(function(v) { params.append(btn.dataset.key, v); });
-          params.delete('page');
-          window.location.search = params.toString();
-        }
+        var p    = getParams();
+        var val  = decodeURIComponent(btn.dataset.value);
+        var kept = p.getAll(btn.dataset.key).filter(function(v) { return v !== val; });
+        p.delete(btn.dataset.key);
+        kept.forEach(function(v) { p.append(btn.dataset.key, v); });
+        p.delete('page');
+        window.location.search = p.toString();
       });
     });
 
@@ -496,20 +454,12 @@
     /* Checkboxes */
     document.querySelectorAll('#ml-cf-groups-' + SID + ' .ml-cf__checkbox').forEach(function(cb) {
       cb.addEventListener('change', function() {
-        var val = decodeURIComponent(cb.dataset.filterValue);
-        if (cb.dataset.filterType === 'tag') {
-          var active = getActiveTags();
-          var idx    = active.indexOf(val);
-          if (cb.checked && idx === -1) active.push(val);
-          else if (!cb.checked && idx !== -1) active.splice(idx, 1);
-          applyTagFilters(active);
-        } else {
-          var active = getActiveParamValues(cb.dataset.filterType);
-          var idx    = active.indexOf(val);
-          if (cb.checked && idx === -1) active.push(val);
-          else if (!cb.checked && idx !== -1) active.splice(idx, 1);
-          applyParamFilters(cb.dataset.filterType, active);
-        }
+        var val    = decodeURIComponent(cb.dataset.filterValue);
+        var active = getActiveValues(cb.dataset.filterType);
+        var idx    = active.indexOf(val);
+        if (cb.checked && idx === -1) active.push(val);
+        else if (!cb.checked && idx !== -1) active.splice(idx, 1);
+        applyFilters(cb.dataset.filterType, active);
       });
     });
 
