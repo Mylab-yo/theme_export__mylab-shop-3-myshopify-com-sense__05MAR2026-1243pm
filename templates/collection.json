@@ -16,7 +16,7 @@
           "settings": {
             "label": "Gamme",
             "filter_type": "tag",
-            "values": "Nourrissant | nourrissant\nVolume | volume\nLissant | lissant\nBoucles | boucles\nPurifiant | purifiant\nProtecteur couleur | protecteur-couleur\nDéjaunisseur | dejaunisseur\nHomme | homme"
+            "values": "Nourrissant | nourrissant ; Volume | volume ; Lissant | lissant ; Boucles | boucles ; Purifiant | purifiant ; Protecteur couleur | protecteur-couleur ; Déjaunisseur | dejaunisseur ; Homme | homme"
           }
         },
         "contenance": {
@@ -24,7 +24,7 @@
           "settings": {
             "label": "Contenance",
             "filter_type": "tag",
-            "values": "200 ml | 200ml\n500 ml | 500ml\n1000 ml | 1000ml"
+            "values": "200 ml | 200ml ; 500 ml | 500ml ; 1000 ml | 1000ml ; 50 ml | 50ml"
           }
         },
         "type": {
@@ -32,7 +32,7 @@
           "settings": {
             "label": "Type",
             "filter_type": "product_type",
-            "values": "Shampoing | Shampoing\nMasque | Masque\nCrème | Crème\nSoin | Soin\nHuile | Huile\nCire | Cire"
+            "values": "Shampoing | Shampoing ; Masque | Masque ; Crème | Crème ; Soin | Soin ; Huile | Huile ; Cire | Cire"
           }
         }
       },

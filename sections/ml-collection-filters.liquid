@@ -258,8 +258,8 @@
     <div class="ml-cf__groups" id="ml-cf-groups-{{ section.id }}">
       {%- for block in section.blocks -%}
         {%- if block.type == 'filter_group' -%}
-          {%- assign raw_values = block.settings.values | remove: "\r" | strip -%}
-          {%- assign value_lines = raw_values | split: "\n" -%}
+          {%- assign raw_values = block.settings.values | strip -%}
+          {%- assign value_lines = raw_values | split: ";" -%}
 
           <div
             class="ml-cf__group"
@@ -590,9 +590,9 @@
         {
           "type": "textarea",
           "id": "values",
-          "label": "Valeurs (une par ligne)",
-          "info": "Format : Libellé | valeur_tag  — ex: Nourrissant | nourrissant",
-          "default": "Nourrissant | nourrissant\nVolume | volume\nLissant | lissant"
+          "label": "Valeurs (séparées par ;)",
+          "info": "Format : Libellé | valeur ; Libellé | valeur — ex: Nourrissant | nourrissant ; Volume | volume",
+          "default": "Nourrissant | nourrissant ; Volume | volume ; Lissant | lissant"
         }
       ]
     }
