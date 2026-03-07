@@ -47,6 +47,45 @@
         "padding_bottom": 0
       }
     },
+    "ml-steps": {
+      "type": "mylab-steps",
+      "blocks": {
+        "step-1": {
+          "type": "step",
+          "settings": {
+            "title": "TESTEZ LES PRODUITS",
+            "description": "Testez nos produits capillaires en format individuel ou via le coffret découverte avant de lancer votre gamme."
+          }
+        },
+        "step-2": {
+          "type": "step",
+          "settings": {
+            "title": "DOSSIER COSMÉTOLOGIQUE",
+            "description": "Notre équipe dépose votre marque sur le Portail de Notification des Produits Cosmétiques et crée vos codes-barres."
+          }
+        },
+        "step-3": {
+          "type": "step",
+          "settings": {
+            "title": "PERSONNALISEZ VOS ÉTIQUETTES",
+            "description": "Choisissez parmi nos modèles ou faites créer une étiquette sur mesure aux couleurs de votre marque."
+          }
+        },
+        "step-4": {
+          "type": "step",
+          "settings": {
+            "title": "LA BOUTIQUE",
+            "description": "Votre marque est validée. Commandez votre gamme à partir de 6 unités par référence depuis votre espace client."
+          }
+        }
+      },
+      "block_order": ["step-1", "step-2", "step-3", "step-4"],
+      "settings": {
+        "eyebrow": "Comment ça marche",
+        "title": "Les étapes de création de votre marque",
+        "subtitle": "Lancez votre marque capillaire en quelques étapes simples, accompagné par nos équipes."
+      }
+    },
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
@@ -133,6 +172,7 @@
   },
   "order": [
     "image-with-text",
+    "ml-steps",
     "featured-collection",
     "ml_profit_calculator_m7nXCA"
   ]

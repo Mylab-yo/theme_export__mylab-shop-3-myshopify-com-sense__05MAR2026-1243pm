@@ -57,30 +57,60 @@
     <div class="ml-divider"></div>
 
     {%- comment -%} ====== SÉLECTEUR CONTENANCE ====== {%- endcomment -%}
-    {%- assign contenance_handles = 'shampoing-nourrissant|shampoing-nourrissant-500ml|shampoing-nourrissant-1000-ml' | split: '|' -%}
-    {%- assign contenance_labels = '200ml|500ml|1000ml' | split: '|' -%}
+    {%- assign h200  = product.metafields.custom.contenance_200ml.value -%}
+    {%- assign h500  = product.metafields.custom.contenance_500ml.value -%}
+    {%- assign h1000 = product.metafields.custom.contenance_1000ml.value -%}
+    {%- if h200 != blank or h500 != blank or h1000 != blank -%}
     <div class="ml-option-group">
       <div class="ml-option-label">Contenance</div>
       <div class="ml-contenance-btns" role="group" aria-label="Sélectionner la contenance">
-        {%- for i in (0..2) -%}
-          {%- assign cont_handle = contenance_handles[i] -%}
-          {%- assign cont_label = contenance_labels[i] -%}
-          {%- assign cont_product = all_products[cont_handle] -%}
-          {%- if cont_product.id != blank -%}
-            {%- assign is_current = false -%}
-            {%- if cont_handle == product.handle -%}{%- assign is_current = true -%}{%- endif -%}
-            <a href="{{ cont_product.url }}"
-               class="ml-contenance-btn {% if is_current %}is-active{% endif %}"
-               data-contenance="{{ cont_label }}"
-               data-variant-id="{{ cont_product.variants.first.id }}"
-               data-price="{{ cont_product.variants.first.price }}"
-               {% if is_current %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}>
-              {{ cont_label }}
+        {%- if h200 != blank -%}
+          {%- assign p200 = all_products[h200] -%}
+          {%- if p200.id != blank -%}
+            {%- if p200.handle contains '50-ml' or p200.handle contains 'en-50-ml' -%}
+              {%- assign label200 = '50ml' -%}
+            {%- else -%}
+              {%- assign label200 = '200ml' -%}
+            {%- endif -%}
+            <a href="{{ p200.url }}"
+               class="ml-contenance-btn {% if h200 == product.handle %}is-active{% endif %}"
+               data-contenance="{{ label200 }}"
+               data-variant-id="{{ p200.variants.first.id }}"
+               data-price="{{ p200.variants.first.price }}"
+               {% if h200 == product.handle %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}>
+              {{ label200 }}
             </a>
           {%- endif -%}
-        {%- endfor -%}
+        {%- endif -%}
+        {%- if h500 != blank -%}
+          {%- assign p500 = all_products[h500] -%}
+          {%- if p500.id != blank -%}
+            <a href="{{ p500.url }}"
+               class="ml-contenance-btn {% if h500 == product.handle %}is-active{% endif %}"
+               data-contenance="500ml"
+               data-variant-id="{{ p500.variants.first.id }}"
+               data-price="{{ p500.variants.first.price }}"
+               {% if h500 == product.handle %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}>
+              500ml
+            </a>
+          {%- endif -%}
+        {%- endif -%}
+        {%- if h1000 != blank -%}
+          {%- assign p1000 = all_products[h1000] -%}
+          {%- if p1000.id != blank -%}
+            <a href="{{ p1000.url }}"
+               class="ml-contenance-btn {% if h1000 == product.handle %}is-active{% endif %}"
+               data-contenance="1000ml"
+               data-variant-id="{{ p1000.variants.first.id }}"
+               data-price="{{ p1000.variants.first.price }}"
+               {% if h1000 == product.handle %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}>
+              1000ml
+            </a>
+          {%- endif -%}
+        {%- endif -%}
       </div>
     </div>
+    {%- endif -%}
 
     {%- comment -%} ====== SÉLECTEUR PALIERS QUANTITÉ ====== {%- endcomment -%}
     <div class="ml-option-group">
