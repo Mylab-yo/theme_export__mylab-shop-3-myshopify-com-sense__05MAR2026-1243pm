@@ -55,12 +55,15 @@
   user-select: none;
 }
 
-.ml-cf__pill::-webkit-details-marker,
-.ml-cf__pill::marker { display: none; }
+.ml-cf__pill {
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+}
 
 .ml-cf__pill:hover { border-color: #111; }
 
-.ml-cf__group[open] > .ml-cf__pill,
+.ml-cf__group.is-open > .ml-cf__pill,
 .ml-cf__pill--active {
   background: #111;
   color: #fff;
@@ -96,7 +99,7 @@
   stroke-linejoin: round;
 }
 
-.ml-cf__group[open] > .ml-cf__pill .ml-cf__pill-caret {
+.ml-cf__group.is-open > .ml-cf__pill .ml-cf__pill-caret {
   transform: rotate(180deg);
   color: #fff;
 }
@@ -258,18 +261,18 @@
           {%- assign raw_values = block.settings.values | remove: "\r" | strip -%}
           {%- assign value_lines = raw_values | split: "\n" -%}
 
-          <details
+          <div
             class="ml-cf__group"
             id="ml-cf-group-{{ block.id }}"
             {{ block.shopify_attributes }}
           >
-            <summary class="ml-cf__pill" id="ml-cf-pill-{{ block.id }}">
+            <button type="button" class="ml-cf__pill" id="ml-cf-pill-{{ block.id }}" aria-expanded="false">
               <span class="ml-cf__pill-text">{{ block.settings.label }}</span>
               <span class="ml-cf__pill-badge" style="display:none" aria-hidden="true"></span>
               <svg class="ml-cf__pill-caret" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1"/></svg>
-            </summary>
+            </button>
 
-            <div class="ml-cf__dropdown">
+            <div class="ml-cf__dropdown" role="dialog">
               {%- for line in value_lines -%}
                 {%- assign line_clean = line | strip -%}
                 {%- unless line_clean == blank -%}
@@ -295,7 +298,7 @@
                 {%- endunless -%}
               {%- endfor -%}
             </div>
-          </details>
+          </div>
         {%- endif -%}
       {%- endfor -%}
     </div>
@@ -498,22 +501,26 @@
       if (!dropdown) return;
       positionDropdown(group);
       dropdown.classList.add('is-open');
+      group.classList.add('is-open');
+      if (pill) pill.setAttribute('aria-expanded', 'true');
       openGroup = group;
     }
 
     function closeDropdown(group) {
       var dropdown = group.querySelector('.ml-cf__dropdown');
+      var pill     = group.querySelector('.ml-cf__pill');
       if (!dropdown) return;
       dropdown.classList.remove('is-open');
+      group.classList.remove('is-open');
+      if (pill) pill.setAttribute('aria-expanded', 'false');
       if (openGroup === group) openGroup = null;
     }
 
-    /* Intercepte les clics sur les pills */
+    /* Clics sur les pills */
     document.querySelectorAll('#ml-cf-groups-' + SID + ' .ml-cf__pill').forEach(function(pill) {
-      pill.addEventListener('click', function(e) {
-        e.preventDefault();
+      pill.addEventListener('click', function() {
         var group = pill.closest('.ml-cf__group');
-        if (openGroup === group && group.querySelector('.ml-cf__dropdown.is-open')) {
+        if (group.classList.contains('is-open')) {
           closeDropdown(group);
         } else {
           openDropdown(group);
