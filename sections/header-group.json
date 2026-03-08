@@ -1,1 +1,131 @@
-{"name":"t:sections.header.name","type":"header","sections":{"announcement-bar":{"type":"announcement-bar","blocks":{"announcement-bar-0":{"type":"announcement","settings":{"text":"Welcome to our store","link":""}}},"block_order":["announcement-bar-0"],"settings":{"auto_rotate":false,"change_slides_speed":5,"color_scheme":"scheme-2","show_line_separator":true,"show_social":false,"enable_country_selector":false,"enable_language_selector":false}},"header":{"type":"header","settings":{"logo_position":"top-center","mobile_logo_position":"center","menu":"main-menu","menu_type_desktop":"mega","sticky_header_type":"on-scroll-up","show_line_separator":false,"color_scheme":"scheme-1","menu_color_scheme":"scheme-1","enable_country_selector":true,"enable_language_selector":true,"enable_customer_avatar":true,"margin_bottom":24,"padding_top":20,"padding_bottom":20}}},"order":["announcement-bar","header"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement-bar-0": {
+          "type": "announcement",
+          "settings": {
+            "text": "Welcome to our store",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement-bar-0"
+      ],
+      "settings": {
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "color_scheme": "scheme-2",
+        "show_line_separator": true,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_position": "top-center",
+        "mobile_logo_position": "center",
+        "menu": "main-menu",
+        "menu_type_desktop": "mega",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": false,
+        "color_scheme": "scheme-1",
+        "menu_color_scheme": "scheme-1",
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "enable_customer_avatar": true,
+        "margin_bottom": 24,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "scrolling_promotion_yPUxBT": {
+      "type": "scrolling-promotion",
+      "blocks": {
+        "announcement_tPiGba": {
+          "type": "announcement",
+          "settings": {
+            "icon": "none",
+            "icon_size": "medium",
+            "custom_icon": "",
+            "text": "Commandez des testeurs à partir de 5€",
+            "text_size": 20,
+            "link": ""
+          }
+        },
+        "announcement_4nFAHN": {
+          "type": "announcement",
+          "settings": {
+            "icon": "none",
+            "icon_size": "medium",
+            "custom_icon": "",
+            "text": "Welcome to our store",
+            "text_size": 20,
+            "link": ""
+          }
+        },
+        "announcement_bEHmeL": {
+          "type": "announcement",
+          "settings": {
+            "icon": "none",
+            "icon_size": "medium",
+            "custom_icon": "",
+            "text": "Welcome to our store",
+            "text_size": 20,
+            "link": ""
+          }
+        },
+        "announcement_YQdLAM": {
+          "type": "announcement",
+          "settings": {
+            "icon": "none",
+            "icon_size": "medium",
+            "custom_icon": "",
+            "text": "Welcome to our store",
+            "text_size": 20,
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_tPiGba",
+        "announcement_4nFAHN",
+        "announcement_bEHmeL",
+        "announcement_YQdLAM"
+      ],
+      "name": "t:sections.scrolling-promotion.presets.name",
+      "settings": {
+        "direction": "left",
+        "speed": 1.6,
+        "show_divider": false,
+        "use_custom_colors": false,
+        "colors_icon": "#ffffff",
+        "colors_text": "#1a1b18",
+        "colors_background": "#ffffff",
+        "gradient_background": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "scrolling_promotion_yPUxBT"
+  ]
+}
