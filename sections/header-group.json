@@ -70,6 +70,7 @@
         },
         "announcement_4nFAHN": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "icon": "none",
             "icon_size": "medium",
@@ -81,6 +82,7 @@
         },
         "announcement_bEHmeL": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "icon": "none",
             "icon_size": "medium",
