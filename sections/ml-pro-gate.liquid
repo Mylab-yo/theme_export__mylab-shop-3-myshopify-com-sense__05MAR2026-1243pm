@@ -1,0 +1,203 @@
+{%- comment -%}
+  ml-pro-gate.liquid
+  Section d'accès conditionnel à la boutique partenaire.
+  - Client avec tag "pro" → ne rend rien (la page s'affiche normalement)
+  - Client connecté sans tag "pro" → overlay plein écran "accès non autorisé"
+  - Non connecté → overlay plein écran avec CTA connexion / devenir partenaire
+{%- endcomment -%}
+
+{%- unless customer and customer.tags contains 'pro' -%}
+
+{%- style -%}
+.ml-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  overflow-y: auto;
+}
+
+.ml-gate__inner {
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+}
+
+.ml-gate__icon {
+  width: 64px;
+  height: 64px;
+  background: #f4f4f2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2.4rem;
+}
+
+.ml-gate__icon svg {
+  width: 28px;
+  height: 28px;
+  color: #555;
+}
+
+.ml-gate__eyebrow {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0 0 1.2rem;
+}
+
+.ml-gate__title {
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-weight: 700;
+  color: #111;
+  line-height: 1.2;
+  margin: 0 0 1.6rem;
+}
+
+.ml-gate__text {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: rgba(17,17,17,0.6);
+  line-height: 1.7;
+  margin: 0 0 3.2rem;
+}
+
+.ml-gate__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.ml-gate__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem 2.8rem;
+  border-radius: 50px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  min-width: 240px;
+}
+
+.ml-gate__btn--primary {
+  background: #111;
+  color: #fff;
+  border: 2px solid #111;
+}
+
+.ml-gate__btn--primary:hover {
+  background: #333;
+  border-color: #333;
+}
+
+.ml-gate__btn--secondary {
+  background: transparent;
+  color: #111;
+  border: 2px solid #d0d0d0;
+}
+
+.ml-gate__btn--secondary:hover {
+  border-color: #111;
+}
+
+.ml-gate__divider {
+  font-size: 1.3rem;
+  color: #bbb;
+  margin: 0.4rem 0;
+}
+
+.ml-gate__note {
+  margin-top: 3.2rem;
+  padding-top: 2.4rem;
+  border-top: 1px solid #f0f0f0;
+  font-size: 1.3rem;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.ml-gate__note a {
+  color: #666;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+{%- endstyle -%}
+
+<div class="ml-gate" role="main">
+  <div class="ml-gate__inner">
+
+    <div class="ml-gate__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+    </div>
+
+    <p class="ml-gate__eyebrow">Espace partenaires</p>
+
+    <h1 class="ml-gate__title">Boutique réservée aux partenaires MY.LAB</h1>
+
+    {%- if customer -%}
+      <p class="ml-gate__text">
+        Votre compte <strong>{{ customer.email }}</strong> ne bénéficie pas encore de l'accès partenaire.<br>
+        Obtenez votre dossier cosméto pour débloquer la boutique et commander en marque blanche.
+      </p>
+      <div class="ml-gate__actions">
+        <a href="{{ section.settings.dossier_url }}" class="ml-gate__btn ml-gate__btn--primary">
+          Obtenir mon dossier cosméto
+        </a>
+        <span class="ml-gate__divider">ou</span>
+        <a href="/collections/testeurs" class="ml-gate__btn ml-gate__btn--secondary">
+          Découvrir les testeurs
+        </a>
+      </div>
+    {%- else -%}
+      <p class="ml-gate__text">
+        Connectez-vous avec votre compte partenaire ou obtenez votre dossier cosméto pour accéder à nos produits en marque blanche à partir de 6 unités.
+      </p>
+      <div class="ml-gate__actions">
+        <a href="/account/login?return_to={{ request.path | url_encode }}" class="ml-gate__btn ml-gate__btn--primary">
+          Se connecter
+        </a>
+        <span class="ml-gate__divider">pas encore partenaire ?</span>
+        <a href="{{ section.settings.dossier_url }}" class="ml-gate__btn ml-gate__btn--secondary">
+          Devenir partenaire MY.LAB
+        </a>
+      </div>
+    {%- endif -%}
+
+    <p class="ml-gate__note">
+      Vous avez déjà acheté votre dossier et votre accès n'est pas activé ?<br>
+      <a href="/pages/contact">Contactez-nous</a> en indiquant votre numéro de commande.
+    </p>
+
+  </div>
+</div>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Gate partenaire",
+  "settings": [
+    {
+      "type": "url",
+      "id": "dossier_url",
+      "label": "Lien vers le dossier cosméto"
+    }
+  ],
+  "presets": [
+    { "name": "Gate partenaire" }
+  ]
+}
+{% endschema %}
