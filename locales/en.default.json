@@ -55,6 +55,21 @@
       "next_slide": "Slide right",
       "previous_slide": "Slide left",
       "name": "Slider"
+    },
+    "breadcrumbs": {
+      "home": "Home",
+      "home_link_title": "Back to the frontpage"
+    },
+    "date": {
+      "d": "D",
+      "day": "Day",
+      "days": "Days",
+      "hour": "Hour",
+      "hours": "Hours",
+      "minute": "Min",
+      "minutes": "Mins",
+      "second": "Sec",
+      "seconds": "Secs"
     }
   },
   "newsletter": {
@@ -78,7 +93,44 @@
     "total_reviews": "total reviews",
     "star_reviews_info": "{{ rating_value }} out of {{ rating_max }} stars",
     "collapsible_content_title": "Collapsible content",
-    "complementary_products": "Complementary products"
+    "complementary_products": "Complementary products",
+    "account": "Account",
+    "blog_filter": "Blog filter",
+    "cart": "Cart",
+    "close_popup": "Close popup",
+    "home": "Home",
+    "maximum_price": "Maximum price",
+    "menu": "Menu",
+    "minimum_price": "Minimum price",
+    "open_deals_drawer": "Open deals drawer",
+    "open_description_popup": "Open description popup",
+    "play_video": "Play video",
+    "popup": "Popup",
+    "popup_notification": "Popup notification",
+    "product_grid_scrollable": "Product grid, horizontally scrollable",
+    "rating_stars": "Rating: {{ rating }} out of 5 stars",
+    "site_header": "Site header",
+    "view_image": "View {{ title }}",
+    "view_slide_image": "View slide image",
+    "view_slide_video": "View slide video",
+    "view_slide": "View slide {{ type }}",
+    "search": "Search",
+    "shop": "Shop",
+    "drag_to_compare_images": "Drag to compare images",
+    "guarantees_list_scrollable": "Guarantees list, horizontally scrollable",
+    "site_footer": "Site footer",
+    "site_announcements": "Site announcements",
+    "breadcrumbs": "Breadcrumbs",
+    "change_language": "Change language to {{ language }}",
+    "change_country": "Change country to {{ country }}",
+    "home_link": "Go to home page",
+    "account_link": "Go to account",
+    "cart_link": "View cart",
+    "close_facet": "Close {{ facet }} filter",
+    "close_menu": "Close menu",
+    "language_selector": "Select language",
+    "country_selector": "Select country",
+    "grid_layout": "Switch to {{ count }} columns grid layout"
   },
   "blogs": {
     "article": {
@@ -217,6 +269,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "Page not found",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "No results found for “{{ terms }}”. Check the spelling or use a different word or phrase.",
       "page": "Page",
@@ -260,10 +316,6 @@
         "post_success": "Thanks for contacting us. We'll get back to you as soon as possible.",
         "error_heading": "Please adjust the following:"
       }
-    },
-    "404": {
-      "title": "Page not found",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -274,7 +326,6 @@
       "announcement": "Announcement",
       "announcement_bar": "Announcement bar"
     },
-
     "header": {
       "announcement": "Announcement",
       "menu": "Menu",
@@ -374,6 +425,10 @@
       "min_error": "This item has a minimum of {{ min }}",
       "max_error": "This item has a maximum of {{ max }}",
       "step_error": "You can only add this item in increments of {{ step }}"
+    },
+    "comparison_table": {
+      "shop_button": "Shop",
+      "placeholder_product": "Your product"
     }
   },
   "localization": {
@@ -383,7 +438,8 @@
     "update_country": "Update country/region",
     "search": "Search",
     "popular_countries_regions": "Popular countries/regions",
-    "country_results_count": "{{ count }} countries/regions found"
+    "country_results_count": "{{ count }} countries/regions found",
+    "text_direction_trigger": "LTR"
   },
   "customer": {
     "account": {
