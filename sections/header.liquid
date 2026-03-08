@@ -1,480 +1,84 @@
 <link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
+{%- if section.settings.menu_type_desktop == 'mega' -%}
+  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+
+
 <style>
-  /* =============================================
-     ML HEADER — design selfnamed-style
-     ============================================= */
-
-  /* --- Barre d'annonce --- */
-  .ml-announcement {
-    background: #f5f4f2;
-    border-bottom: 1px solid #e8e8e8;
-    text-align: center;
-    padding: 0.9rem 2rem;
-    font-size: 1.3rem;
-    color: #555555;
-    letter-spacing: 0.01em;
-    line-height: 1.5;
-  }
-
-  .ml-announcement p {
-    margin: 0;
-  }
-
-  .ml-announcement a {
-    color: #111111;
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
-  .ml-announcement a:hover {
-    color: #333333;
-  }
-
-  .ml-header-wrapper {
-    background: #ffffff;
-    border-bottom: 1px solid #e8e8e8;
-  }
-
-  .ml-header {
-    display: flex;
-    align-items: center;
-    height: 68px;
-    padding-left: 3rem;
-    padding-right: 3rem;
-  }
-
-  /* --- Logo --- */
-  .ml-header__logo-heading {
-    margin: 0;
-    line-height: 1;
-  }
-
-  .ml-header__logo-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    flex-shrink: 0;
-    margin-right: 3.2rem;
-    outline-offset: 3px;
-  }
-
-  .ml-header__logo-img {
-    max-height: 38px;
-    width: auto;
-    display: block;
-  }
-
-  .ml-header__shop-name {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #111111;
-    white-space: nowrap;
-    letter-spacing: -0.02em;
-  }
-
-  /* --- Nav desktop --- */
-  .ml-header__nav {
-    flex: 1;
-    display: none;
-  }
-
-  @media screen and (min-width: 990px) {
-    .ml-header__nav {
-      display: block;
-    }
-  }
-
-  .ml-header__nav-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-  }
-
-  .ml-header__nav-item {
-    position: relative;
-  }
-
-  /* summary reset */
-  .ml-header__nav-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.2rem;
-    font-size: 1.45rem;
-    font-weight: 500;
-    color: #111111;
-    text-decoration: none;
-    border-radius: 6px;
-    white-space: nowrap;
-    cursor: pointer;
-    list-style: none;
-    border: none;
-    background: transparent;
-    font-family: inherit;
-    line-height: 1.2;
-    transition: background 0.15s ease, color 0.15s ease;
-    -webkit-appearance: none;
-  }
-
-  .ml-header__nav-link::-webkit-details-marker,
-  .ml-header__nav-link::marker {
-    display: none;
-  }
-
-  .ml-header__nav-link:hover {
-    background: transparent;
-    color: #000;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
-  }
-
-  .ml-header__nav-link--active {
-    color: #000;
-    font-weight: 600;
-  }
-
-  /* Caret icon */
-  .ml-header__caret {
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-    color: #555;
-  }
-
-  details[open] > .ml-header__nav-link .ml-header__caret {
-    transform: rotate(180deg);
-  }
-
-  /* --- Dropdown --- */
-  .ml-header__dropdown {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    min-width: 200px;
-    background: #ffffff;
-    border: 1px solid #e8e8e8;
-    border-radius: 10px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
-    list-style: none;
-    margin: 0;
-    padding: 0.5rem 0;
-    z-index: 200;
-    /* animation */
-    opacity: 0;
-    transform: translateY(-4px);
-    pointer-events: none;
-    transition: opacity 0.16s ease, transform 0.16s ease;
-  }
-
-  details[open] > .ml-header__dropdown {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .ml-header__dropdown-link {
-    display: block;
-    padding: 0.85rem 1.6rem;
-    font-size: 1.4rem;
-    font-weight: 400;
-    color: #111111;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: background 0.12s ease;
-  }
-
-  .ml-header__dropdown-link:hover {
-    background: #f5f5f5;
-    color: #000;
-  }
-
-  .ml-header__dropdown-link--active {
-    font-weight: 600;
-  }
-
-  /* --- Actions (right side) --- */
-  .ml-header__actions {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin-left: auto;
-    flex-shrink: 0;
-  }
-
-  /* Auth buttons — desktop only */
-  .ml-header__auth {
-    display: none;
-    align-items: center;
-    gap: 0.8rem;
-  }
-
-  @media screen and (min-width: 990px) {
-    .ml-header__auth {
-      display: flex;
-    }
-  }
-
-  .ml-header__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.8rem;
-    border-radius: 50px;
-    font-size: 1.35rem;
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-    line-height: 1;
-    letter-spacing: 0.01em;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-    outline-offset: 3px;
-  }
-
-  .ml-header__btn--login {
-    border: 1.5px solid #111111;
-    color: #111111;
-    background: transparent;
-  }
-
-  .ml-header__btn--login:hover {
-    background: #111111;
-    color: #ffffff;
-  }
-
-  .ml-header__btn--signup {
-    background: #111111;
-    color: #ffffff;
-    border: 1.5px solid #111111;
-  }
-
-  .ml-header__btn--signup:hover {
-    background: #333333;
-    border-color: #333333;
-  }
-
-  /* Cart icon — pill style harmonisé avec les boutons auth */
-  .ml-header__cart {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.55rem;
-    position: relative;
-    color: #111111;
-    text-decoration: none;
-    padding: 0.75rem 1.4rem;
-    border-radius: 50px;
-    border: 1.5px solid #111111;
-    font-size: 1.35rem;
-    font-weight: 600;
-    line-height: 1;
-    transition: background 0.15s ease, color 0.15s ease;
-    white-space: nowrap;
-  }
-
-  /* Reset styles natifs du navigateur pour <button> */
-  button.ml-header__cart {
-    background: transparent;
-    -webkit-appearance: none;
-    appearance: none;
-    cursor: pointer;
-    box-shadow: none !important;
-    outline: none;
-  }
-
-  button.ml-header__cart:focus-visible {
-    outline: 2px solid #111111;
-    outline-offset: 3px;
-    box-shadow: none !important;
-  }
-
-  .ml-header__cart:hover {
-    background: #111111;
-    color: #ffffff;
-  }
-
-  .ml-header__cart svg,
-  .ml-header__cart .svg-wrapper svg {
-    width: 22px;
-    height: 22px;
-    flex-shrink: 0;
-    stroke: currentColor;
-    fill: none;
-  }
-
-  .ml-header__cart .cart-count-bubble {
-    position: static;
-    min-width: auto;
-    height: auto;
-    background: none;
-    color: inherit;
-    font-size: 1.4rem;
-    font-weight: 700;
-    border-radius: 0;
-    display: inline;
-    padding: 0;
-    line-height: 1;
-  }
-
-  /* Bouton loupe — pill outline */
-  .ml-header__search-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: 1.5px solid #111111;
-    border-radius: 50px;
-    color: #111111;
-    cursor: pointer;
-    padding: 0.72rem;
-    transition: background 0.15s ease, color 0.15s ease;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  .ml-header__search-toggle:hover,
-  .ml-header__search-toggle[aria-expanded="true"] {
-    background: #111111;
-    color: #ffffff;
-  }
-
-  .ml-header__search-toggle svg {
-    display: block;
-  }
-
-  /* Panneau recherche slide-down */
-  .ml-search-panel {
-    background: #ffffff;
-    border-bottom: 1px solid #e8e8e8;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .ml-search-panel.is-open {
-    max-height: 400px;
-  }
-
-  .ml-search-panel__inner {
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 1.6rem 3rem 2rem;
-  }
-
-  /* Champ de saisie */
-  .ml-search-panel__field {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    border: 1.5px solid #111111;
-    border-radius: 50px;
-    overflow: hidden;
-    background: #ffffff;
-    transition: box-shadow 0.2s ease;
-  }
-
-  .ml-search-panel__field:focus-within {
-    box-shadow: 0 0 0 3px rgba(17,17,17,0.08);
-  }
-
-  .ml-search-panel__field-icon {
-    flex-shrink: 0;
-    padding: 0 0 0 1.6rem;
-    color: #888;
-    display: flex;
-    align-items: center;
-  }
-
-  .ml-search-panel__input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    padding: 1.1rem 1rem;
-    font-family: inherit;
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: #111111;
-    min-width: 0;
-  }
-
-  .ml-search-panel__input::placeholder {
-    color: #aaa;
-  }
-
-  .ml-search-panel__reset {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.8rem;
-    color: #aaa;
-    display: flex;
-    align-items: center;
-    transition: color 0.15s;
-    flex-shrink: 0;
-  }
-
-  .ml-search-panel__reset:hover { color: #111; }
-  .ml-search-panel__reset.hidden { display: none; }
-
-  .ml-search-panel__submit {
-    flex-shrink: 0;
-    background: #111111;
-    border: none;
-    border-radius: 0 50px 50px 0;
-    cursor: pointer;
-    padding: 1rem 1.6rem;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    transition: background 0.15s;
-  }
-
-  .ml-search-panel__submit:hover { background: #333; }
-
-  /* Résultats prédictifs — override style Sense */
-  .ml-search-panel .predictive-search {
-    border: 1px solid #e8e8e8;
-    border-radius: 1.2rem;
-    margin-top: 0.8rem;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-    overflow: hidden;
-  }
-
-  /* Mobile hamburger — hide on desktop */
   header-drawer {
-    display: flex;
-    align-items: center;
+    justify-self: start;
+    margin-left: -1.2rem;
   }
 
-  @media screen and (min-width: 990px) {
-    header-drawer {
-      display: none;
-    }
-  }
-
-  /* Sticky logo shrink */
   {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
-    .scrolled-past-header .ml-header__logo-img {
-      max-height: 28px;
+    .scrolled-past-header .header__heading-logo-wrapper {
+      width: 75%;
     }
   {%- endif -%}
+
+  {%- if section.settings.menu_type_desktop != "drawer" -%}
+    @media screen and (min-width: 990px) {
+      header-drawer {
+        display: none;
+      }
+    }
+  {%- endif -%}
+
+  .menu-drawer-container {
+    display: flex;
+  }
+
+  .list-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .list-menu--inline {
+    display: inline-flex;
+    flex-wrap: wrap;
+  }
+
+  summary.list-menu__item {
+    padding-right: 2.7rem;
+  }
+
+  .list-menu__item {
+    display: flex;
+    align-items: center;
+    line-height: calc(1 + 0.3 / var(--font-body-scale));
+  }
+
+  .list-menu__item--link {
+    text-decoration: none;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    line-height: calc(1 + 0.8 / var(--font-body-scale));
+  }
+
+  @media screen and (min-width: 750px) {
+    .list-menu__item--link {
+      padding-bottom: 0.5rem;
+      padding-top: 0.5rem;
+    }
+  }
 </style>
 
 {%- style -%}
+  .header {
+    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
+  }
+
   .section-header {
-    position: sticky;
+    position: sticky; /* This is for fixing a Safari z-index issue. PR #2147 */
     margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
   }
 
@@ -483,253 +87,214 @@
       margin-bottom: {{ section.settings.margin_bottom }}px;
     }
   }
+
+  @media screen and (min-width: 990px) {
+    .header {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
+  for block in section.blocks
+    if block.type == '@app'
+      assign has_app_block = true
+    endif
+  endfor
+-%}
+
+{% liquid
   assign header_tag = 'div'
+
   if section.settings.sticky_header_type != 'none'
     assign header_tag = 'sticky-header'
   endif
--%}
+%}
 
-{%- if section.settings.announcement_text != blank -%}
-  <div class="ml-announcement" role="note">
-    <p>
-      {%- if section.settings.announcement_link != blank -%}
-        <a href="{{ section.settings.announcement_link }}">{{ section.settings.announcement_text }}</a>
-      {%- else -%}
-        {{ section.settings.announcement_text }}
+<{{ header_tag }} {% if header_tag == 'sticky-header' %}data-sticky-type="{{ section.settings.sticky_header_type }}"{% endif %} class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}">
+  {%- liquid
+    assign social_links = false
+    assign localization_forms = false
+
+    if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
+      assign social_links = true
+    endif
+
+    if localization.available_countries.size > 1 and section.settings.enable_country_selector or section.settings.enable_language_selector and localization.available_languages.size > 1
+      assign localization_forms = true
+    endif
+  -%}
+  <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
+    {%- liquid
+      if section.settings.menu != blank
+        render 'header-drawer'
+      endif
+
+      if section.settings.logo_position == 'top-center' or section.settings.menu == blank
+        render 'header-search', input_id: 'Search-In-Modal-1'
+      endif
+    -%}
+
+    {%- if section.settings.logo_position != 'middle-center' -%}
+      {%- if request.page_type == 'index' -%}
+        <h1 class="header__heading">
       {%- endif -%}
-    </p>
-  </div>
-{%- endif -%}
-
-<{{ header_tag }}
-  {% if header_tag == 'sticky-header' %}data-sticky-type="{{ section.settings.sticky_header_type }}"{% endif %}
-  class="ml-header-wrapper color-{{ section.settings.color_scheme }} gradient"
->
-  <header class="ml-header" role="banner">
-
-    {%- comment -%} ===== LOGO ===== {%- endcomment -%}
-    {%- if request.page_type == 'index' -%}
-      <h1 class="ml-header__logo-heading">
-    {%- endif -%}
-    <a href="{{ routes.root_url }}" class="ml-header__logo-link link focus-inset">
-      {%- if settings.logo != blank -%}
-        {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-        {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-        {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-        {{ settings.logo | image_url: width: 400 | image_tag:
-          class: 'ml-header__logo-img motion-reduce',
-          widths: widths,
-          height: logo_height,
-          width: settings.logo_width,
-          alt: logo_alt,
-          preload: true
-        }}
-      {%- else -%}
-        <span class="ml-header__shop-name">{{ shop.name }}</span>
+          <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+            {%- if settings.logo != blank -%}
+              <div class="header__heading-logo-wrapper">
+                {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+                {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+                {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+                {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+                {{ settings.logo | image_url: width: 600 | image_tag:
+                  class: 'header__heading-logo motion-reduce',
+                  widths: widths,
+                  height: logo_height,
+                  width: settings.logo_width,
+                  alt: logo_alt,
+                  sizes: sizes,
+                  preload: true
+                }}
+              </div>
+            {%- else -%}
+              <span class="h2">{{ shop.name }}</span>
+            {%- endif -%}
+          </a>
+      {%- if request.page_type == 'index' -%}
+        </h1>
       {%- endif -%}
-    </a>
-    {%- if request.page_type == 'index' -%}
-      </h1>
     {%- endif -%}
 
-    {%- comment -%} ===== NAV DESKTOP ===== {%- endcomment -%}
-    {%- if section.settings.menu != blank -%}
-      <nav class="ml-header__nav" role="navigation" aria-label="{{ 'sections.header.main_menu' | t }}">
-        <ul class="ml-header__nav-list" role="list">
-          {%- for link in section.settings.menu.links -%}
-            <li class="ml-header__nav-item">
-              {%- if link.links != blank -%}
-                <header-menu>
-                  <details id="Details-MLMenu-{{ forloop.index }}">
-                    <summary
-                      id="MLMenu-{{ link.handle }}"
-                      class="ml-header__nav-link focus-inset"
-                    >
-                      <span{% if link.child_active %} class="ml-header__nav-link--active"{% endif %}>
-                        {{- link.title | escape -}}
-                      </span>
-                      <svg class="ml-header__caret" width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true">
-                        <path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </summary>
-                    <ul
-                      id="MLMenu-List-{{ forloop.index }}"
-                      class="ml-header__dropdown"
-                      role="list"
-                      tabindex="-1"
-                    >
-                      {%- for childlink in link.links -%}
-                        <li>
-                          <a
-                            href="{{ childlink.url }}"
-                            class="ml-header__dropdown-link{% if childlink.current %} ml-header__dropdown-link--active{% endif %}"
-                            {% if childlink.current %}aria-current="page"{% endif %}
-                          >
-                            {{- childlink.title | escape -}}
-                          </a>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  </details>
-                </header-menu>
-              {%- else -%}
-                <a
-                  id="MLMenu-{{ link.handle }}"
-                  href="{{ link.url }}"
-                  class="ml-header__nav-link{% if link.current %} ml-header__nav-link--active{% endif %} focus-inset"
-                  {% if link.current %}aria-current="page"{% endif %}
-                >
-                  {{- link.title | escape -}}
-                </a>
-              {%- endif -%}
-            </li>
-          {%- endfor -%}
-        </ul>
-      </nav>
+    {%- liquid
+      if section.settings.menu != blank
+        if section.settings.menu_type_desktop == 'dropdown'
+          render 'header-dropdown-menu'
+        elsif section.settings.menu_type_desktop != 'drawer'
+          render 'header-mega-menu'
+        endif
+      endif
+    %}
+
+    {%- if section.settings.logo_position == 'middle-center' -%}
+      {%- if request.page_type == 'index' -%}
+        <h1 class="header__heading">
+      {%- endif -%}
+          <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+            {%- if settings.logo != blank -%}
+              <div class="header__heading-logo-wrapper">
+                {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+                {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+                {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
+                {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+                {{ settings.logo | image_url: width: 600 | image_tag:
+                  class: 'header__heading-logo',
+                  widths: widths,
+                  height: logo_height,
+                  width: settings.logo_width,
+                  alt: logo_alt,
+                  sizes: sizes,
+                  preload: true
+                }}
+              </div>
+            {%- else -%}
+              <span class="h2">{{ shop.name }}</span>
+            {%- endif -%}
+          </a>
+      {%- if request.page_type == 'index' -%}
+        </h1>
+      {%- endif -%}
     {%- endif -%}
 
-    {%- comment -%} ===== ACTIONS DROITE ===== {%- endcomment -%}
-    <div class="ml-header__actions">
+    <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
+      <div class="desktop-localization-wrapper">
+        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+          <localization-form class="small-hide medium-hide" data-prevent-hide>
+            {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
+              <div>
+                <h2 class="visually-hidden" id="HeaderCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                {%- render 'country-localization', localPosition: 'HeaderCountry' -%}
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {% endif %}
 
-      {%- comment -%} Boutons LOG IN / SIGN UP — desktop uniquement {%- endcomment -%}
-      <div class="ml-header__auth">
-        {%- if customer -%}
-          <a href="{{ routes.account_url }}" class="ml-header__btn ml-header__btn--login" rel="nofollow">
-            Mon compte
-          </a>
-        {%- else -%}
-          <a href="{{ routes.account_login_url }}" class="ml-header__btn ml-header__btn--login" rel="nofollow">
-            LOG IN
-          </a>
-          <a href="{{ routes.account_register_url }}" class="ml-header__btn ml-header__btn--signup" rel="nofollow">
-            SIGN UP
-          </a>
+        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+          <localization-form class="small-hide medium-hide" data-prevent-hide>
+            {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
+              <div>
+                <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+                {%- render 'language-localization', localPosition: 'HeaderLanguage' -%}
+              </div>
+            {%- endform -%}
+          </localization-form>
         {%- endif -%}
       </div>
+      {% render 'header-search', input_id: 'Search-In-Modal' %}
 
-      {%- comment -%} Bouton recherche {%- endcomment -%}
-      <button
-        class="ml-header__search-toggle"
-        id="ml-search-toggle"
-        aria-label="Rechercher"
-        aria-expanded="false"
-        aria-controls="ml-search-panel"
-      >
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
-      </button>
-
-      {%- comment -%} Panier {%- endcomment -%}
-      {%- comment -%}
-        id="cart-icon-bubble" retiré pour éviter l'interception BSS B2B (miniCartMutateHandle).
-        Un span caché conserve l'ID pour les mises à jour de compteur des apps tierces.
-      {%- endcomment -%}
-      <span id="cart-icon-bubble" class="visually-hidden" aria-hidden="true" style="display:none">
-        <span class="cart-count-bubble">{{ cart.item_count }}</span>
-      </span>
-      <button
-        type="button"
-        class="ml-header__cart link focus-inset"
-        id="ml-cart-btn"
-        aria-label="{{ 'templates.cart.cart' | t }}"
-        onclick="mlCartToggle()"
-      >
-        <span class="svg-wrapper">{{- 'icon-cart.svg' | inline_asset_content -}}</span>
-        <span class="ml-cart-count" aria-hidden="true"{% if cart.item_count == 0 %} style="display:none"{% endif %}>
-          {%- if cart.item_count < 100 -%}{{ cart.item_count }}{%- else -%}99+{%- endif -%}
-        </span>
-        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-      </button>
-
-      {%- comment -%} Hamburger mobile — rendu une seule fois {%- endcomment -%}
-      {%- if section.settings.menu != blank -%}
-        {%- render 'header-drawer' -%}
+      {%- if shop.customer_accounts_enabled -%}
+        <a
+          href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+          class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
+          rel="nofollow"
+        >
+          {%- if section.settings.enable_customer_avatar -%}
+            <account-icon>
+              {%- if customer and customer.has_avatar? -%}
+                {{ customer | avatar }}
+              {%- else -%}
+                <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+              {%- endif -%}
+            </account-icon>
+          {%- else -%}
+            <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+          {%- endif -%}
+          <span class="visually-hidden">
+            {%- liquid
+              if customer
+                echo 'customer.account_fallback' | t
+              else
+                echo 'customer.log_in' | t
+              endif
+            -%}
+          </span>
+        </a>
       {%- endif -%}
 
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {% render block %}
+        {%- endcase -%}
+      {%- endfor -%}
+
+      <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
+          {% if cart == empty %}
+            <span class="svg-wrapper">{{'icon-cart-empty.svg' | inline_asset_content }}</span>
+          {% else %}
+            <span class="svg-wrapper">{{'icon-cart.svg' | inline_asset_content }}</span>
+          {% endif %}
+        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+        {%- if cart != empty -%}
+          <div class="cart-count-bubble">
+            {%- if cart.item_count < 100 -%}
+              <span aria-hidden="true">{{ cart.item_count }}</span>
+            {%- endif -%}
+            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+          </div>
+        {%- endif -%}
+      </a>
     </div>
   </header>
-  {%- comment -%} ===== PANNEAU RECHERCHE ===== {%- endcomment -%}
-  <div class="ml-search-panel" id="ml-search-panel" role="search" aria-label="Recherche">
-    <div class="ml-search-panel__inner">
-      <predictive-search data-loading-text="{{ 'accessibility.loading' | t }}">
-        <form action="{{ routes.search_url }}" method="get">
-          <input type="hidden" name="type" value="product">
-          <div class="ml-search-panel__field">
-            <span class="ml-search-panel__field-icon" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-            </span>
-            <input
-              type="search"
-              name="q"
-              id="ml-search-input"
-              class="ml-search-panel__input"
-              placeholder="Rechercher un produit…"
-              role="combobox"
-              autocomplete="off"
-              autocorrect="off"
-              autocapitalize="off"
-              spellcheck="false"
-              aria-autocomplete="list"
-              aria-expanded="false"
-              aria-owns="predictive-search-results"
-            >
-            <button type="reset" class="ml-search-panel__reset hidden" aria-label="Effacer la recherche">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-            </button>
-            <button type="submit" class="ml-search-panel__submit" aria-label="Lancer la recherche">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </button>
-          </div>
-          <div class="predictive-search predictive-search--header-search" tabindex="-1" data-predictive-search></div>
-          <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
-        </form>
-      </predictive-search>
-    </div>
-  </div>
-
 </{{ header_tag }}>
 
-{%- if settings.cart_type == 'notification' -%}
+{%- if settings.cart_type == "notification" -%}
   {%- render 'cart-notification', color_scheme: section.settings.color_scheme, desktop_menu_type: section.settings.menu_type_desktop -%}
 {%- endif -%}
 
 {% javascript %}
-  /* ── Tiroir panier — défini en premier pour être disponible dès le chargement ── */
-  window.mlCartToggle = function() {
-    var d = document.getElementById('ml-cart-drawer');
-    var o = document.getElementById('ml-drawer-overlay');
-    if (!d) { window.location = '/cart'; return; }
-    d.style.cssText = '';
-    if (d.classList.contains('is-open')) {
-      d.classList.remove('is-open');
-      d.setAttribute('aria-hidden', 'true');
-      if (o) o.classList.remove('is-visible');
-      document.body.classList.remove('ml-drawer-open');
-    } else {
-      if (window.MylabCart && window.MylabCart.refresh) {
-        window.MylabCart.refresh().then(function() {
-          d.classList.add('is-open');
-          d.setAttribute('aria-hidden', 'false');
-          if (o) o.classList.add('is-visible');
-          document.body.classList.add('ml-drawer-open');
-        });
-      } else {
-        d.classList.add('is-open');
-        d.setAttribute('aria-hidden', 'false');
-        if (o) o.classList.add('is-visible');
-        document.body.classList.add('ml-drawer-open');
-      }
-    }
-  };
-
   class StickyHeader extends HTMLElement {
     constructor() {
       super();
@@ -737,24 +302,23 @@
 
     connectedCallback() {
       this.header = document.querySelector('.section-header');
-      this.headerIsAlwaysSticky =
-        this.getAttribute('data-sticky-type') === 'always' ||
-        this.getAttribute('data-sticky-type') === 'reduce-logo-size';
+      this.headerIsAlwaysSticky = this.getAttribute('data-sticky-type') === 'always' || this.getAttribute('data-sticky-type') === 'reduce-logo-size';
       this.headerBounds = {};
 
       this.setHeaderHeight();
+
       window.matchMedia('(max-width: 990px)').addEventListener('change', this.setHeaderHeight.bind(this));
 
       if (this.headerIsAlwaysSticky) {
         this.header.classList.add('shopify-section-header-sticky');
-      }
+      };
 
       this.currentScrollTop = 0;
       this.preventReveal = false;
       this.predictiveSearch = this.querySelector('predictive-search');
 
       this.onScrollHandler = this.onScroll.bind(this);
-      this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
+      this.hideHeaderOnScrollUp = () => this.preventReveal = true;
 
       this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
       window.addEventListener('scroll', this.onScrollHandler, false);
@@ -776,6 +340,7 @@
         this.headerBounds = entries[0].intersectionRect;
         observer.disconnect();
       });
+
       observer.observe(this.header);
     }
 
@@ -794,9 +359,11 @@
           requestAnimationFrame(this.reveal.bind(this));
         } else {
           window.clearTimeout(this.isScrolling);
+
           this.isScrolling = setTimeout(() => {
             this.preventReveal = false;
           }, 66);
+
           requestAnimationFrame(this.hide.bind(this));
         }
       } else if (scrollTop <= this.headerBounds.top) {
@@ -811,6 +378,7 @@
       if (this.headerIsAlwaysSticky) return;
       this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky');
       this.closeMenuDisclosure();
+      this.closeSearchModal();
     }
 
     reveal() {
@@ -826,121 +394,16 @@
 
     closeMenuDisclosure() {
       this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu');
-      this.disclosures.forEach((disclosure) => disclosure.close());
+      this.disclosures.forEach(disclosure => disclosure.close());
+    }
+
+    closeSearchModal() {
+      this.searchModal = this.searchModal || this.header.querySelector('details-modal');
+      this.searchModal.close(false);
     }
   }
 
   customElements.define('sticky-header', StickyHeader);
-
-  // ── Panier tiroir MyLab — global (toutes pages) ──────────
-  (function() {
-    function mlOpen() {
-      var drawer  = document.getElementById('ml-cart-drawer');
-      var overlay = document.getElementById('ml-drawer-overlay');
-      if (!drawer) return;
-      drawer.style.cssText = '';          /* reset tout style inline résiduel */
-      drawer.classList.add('is-open');
-      drawer.setAttribute('aria-hidden', 'false');
-      if (overlay) { overlay.classList.add('is-visible'); overlay.setAttribute('aria-hidden', 'false'); }
-      document.body.classList.add('ml-drawer-open');
-    }
-
-    function mlClose() {
-      var drawer  = document.getElementById('ml-cart-drawer');
-      var overlay = document.getElementById('ml-drawer-overlay');
-      if (drawer)  { drawer.style.cssText = ''; drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden', 'true'); }
-      if (overlay) { overlay.classList.remove('is-visible'); overlay.setAttribute('aria-hidden', 'true'); }
-      document.body.classList.remove('ml-drawer-open');
-    }
-
-    function mlToggle() {
-      var drawer = document.getElementById('ml-cart-drawer');
-      if (drawer && drawer.classList.contains('is-open')) {
-        mlClose();
-      } else {
-        if (window.MylabCart && window.MylabCart.refresh) {
-          window.MylabCart.refresh().then(mlOpen);
-        } else {
-          mlOpen();
-        }
-      }
-    }
-
-    window.MylabCart = window.MylabCart || {};
-    window.MylabCart.open   = mlOpen;
-    window.MylabCart.close  = mlClose;
-    window.MylabCart.toggle = mlToggle;
-
-    function initMlCartListeners() {
-      // Interception au niveau document (capture)
-      document.addEventListener('click', function(e) {
-        // Clic sur le bouton panier (nouvel ID hors radar BSS)
-        if (e.target.closest('#ml-cart-btn') && document.getElementById('ml-cart-drawer')) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          e.stopPropagation();
-          mlToggle();
-          return;
-        }
-        // Clic sur l'overlay du tiroir
-        if (e.target.id === 'ml-drawer-overlay') {
-          mlClose();
-          return;
-        }
-        // Clic sur le bouton fermer
-        if (e.target.closest('#ml-drawer-close')) {
-          mlClose();
-        }
-      }, true);
-
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') mlClose();
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initMlCartListeners);
-    } else {
-      initMlCartListeners();
-    }
-  })();
-
-  // ── Recherche toggle ──────────────────────────────────────
-  (function() {
-    var toggle = document.getElementById('ml-search-toggle');
-    var panel  = document.getElementById('ml-search-panel');
-    var input  = document.getElementById('ml-search-input');
-    if (!toggle || !panel) return;
-
-    function openSearch() {
-      panel.classList.add('is-open');
-      toggle.setAttribute('aria-expanded', 'true');
-      setTimeout(function() { if (input) input.focus(); }, 310);
-    }
-
-    function closeSearch() {
-      panel.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', 'false');
-    }
-
-    toggle.addEventListener('click', function() {
-      if (panel.classList.contains('is-open')) {
-        closeSearch();
-      } else {
-        openSearch();
-      }
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && panel.classList.contains('is-open')) closeSearch();
-    });
-
-    document.addEventListener('click', function(e) {
-      if (panel.classList.contains('is-open') && !panel.contains(e.target) && !toggle.contains(e.target)) {
-        closeSearch();
-      }
-    });
-  })();
 {% endjavascript %}
 
 <script type="application/ld+json">
@@ -990,29 +453,25 @@
   "max_blocks": 3,
   "settings": [
     {
-      "type": "header",
-      "content": "Barre d'annonce"
-    },
-    {
-      "type": "text",
-      "id": "announcement_text",
-      "label": "Texte de l'annonce",
-      "info": "Laisser vide pour masquer la barre",
-      "placeholder": "🔥 Inscrivez-vous et bénéficiez de 20% sur votre première commande"
-    },
-    {
-      "type": "url",
-      "id": "announcement_link",
-      "label": "Lien de l'annonce (optionnel)"
-    },
-    {
       "type": "select",
       "id": "logo_position",
       "options": [
-        { "value": "top-left", "label": "t:sections.header.settings.logo_position.options__2.label" },
-        { "value": "top-center", "label": "t:sections.header.settings.logo_position.options__3.label" },
-        { "value": "middle-left", "label": "t:sections.header.settings.logo_position.options__1.label" },
-        { "value": "middle-center", "label": "t:sections.header.settings.logo_position.options__4.label" }
+        {
+          "value": "top-left",
+          "label": "t:sections.header.settings.logo_position.options__2.label"
+        },
+        {
+          "value": "top-center",
+          "label": "t:sections.header.settings.logo_position.options__3.label"
+        },
+        {
+          "value": "middle-left",
+          "label": "t:sections.header.settings.logo_position.options__1.label"
+        },
+        {
+          "value": "middle-center",
+          "label": "t:sections.header.settings.logo_position.options__4.label"
+        }
       ],
       "default": "middle-left",
       "label": "t:sections.header.settings.logo_position.label",
@@ -1022,12 +481,18 @@
       "type": "select",
       "id": "mobile_logo_position",
       "options": [
-        { "value": "center", "label": "t:sections.header.settings.mobile_logo_position.options__1.label" },
-        { "value": "left", "label": "t:sections.header.settings.mobile_logo_position.options__2.label" }
+        {
+          "value": "center",
+          "label": "t:sections.header.settings.mobile_logo_position.options__1.label"
+        },
+        {
+          "value": "left",
+          "label": "t:sections.header.settings.mobile_logo_position.options__2.label"
+        }
       ],
       "default": "center",
       "label": "t:sections.header.settings.mobile_logo_position.label"
-    },
+    },    
     {
       "type": "link_list",
       "id": "menu",
@@ -1038,9 +503,18 @@
       "type": "select",
       "id": "menu_type_desktop",
       "options": [
-        { "value": "dropdown", "label": "t:sections.header.settings.menu_type_desktop.options__1.label" },
-        { "value": "mega", "label": "t:sections.header.settings.menu_type_desktop.options__2.label" },
-        { "value": "drawer", "label": "t:sections.header.settings.menu_type_desktop.options__3.label" }
+        {
+          "value": "dropdown",
+          "label": "t:sections.header.settings.menu_type_desktop.options__1.label"
+        },
+        {
+          "value": "mega",
+          "label": "t:sections.header.settings.menu_type_desktop.options__2.label"
+        },
+        {
+          "value": "drawer",
+          "label": "t:sections.header.settings.menu_type_desktop.options__3.label"
+        }
       ],
       "default": "dropdown",
       "label": "t:sections.header.settings.menu_type_desktop.label"
@@ -1049,10 +523,22 @@
       "type": "select",
       "id": "sticky_header_type",
       "options": [
-        { "value": "none", "label": "t:sections.header.settings.sticky_header_type.options__1.label" },
-        { "value": "on-scroll-up", "label": "t:sections.header.settings.sticky_header_type.options__2.label" },
-        { "value": "always", "label": "t:sections.header.settings.sticky_header_type.options__3.label" },
-        { "value": "reduce-logo-size", "label": "t:sections.header.settings.sticky_header_type.options__4.label" }
+        {
+          "value": "none",
+          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
+        },
+        {
+          "value": "on-scroll-up",
+          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
+        },
+        {
+          "value": "always",
+          "label": "t:sections.header.settings.sticky_header_type.options__3.label"
+        },
+        {
+          "value": "reduce-logo-size",
+          "label": "t:sections.header.settings.sticky_header_type.options__4.label"
+        }
       ],
       "default": "on-scroll-up",
       "label": "t:sections.header.settings.sticky_header_type.label"
@@ -1088,14 +574,14 @@
       "id": "enable_country_selector",
       "default": true,
       "label": "t:sections.header.settings.enable_country_selector.label",
-      "info": "t:sections.header.settings.enable_country_selector.info"
+      "info":"t:sections.header.settings.enable_country_selector.info"
     },
     {
       "type": "checkbox",
       "id": "enable_language_selector",
       "default": true,
       "label": "t:sections.header.settings.enable_language_selector.label",
-      "info": "t:sections.header.settings.enable_language_selector.info"
+      "info":"t:sections.header.settings.enable_language_selector.info"
     },
     {
       "type": "checkbox",
@@ -1144,7 +630,9 @@
     }
   ],
   "blocks": [
-    { "type": "@app" }
+    {
+      "type": "@app"
+    }
   ]
 }
 {% endschema %}
